@@ -1,0 +1,2929 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mohamad Gaming Store</title>
+    
+    <!-- PWA App Meta-Tags -->
+    <meta name="theme-color" content="#121212">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Mohamad Store">
+
+    <style>
+        :root {
+            --primary-color: #6f42c1;
+            --btn-hover: #5a3298;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0 0 80px 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, rgba(111, 66, 193, 0.05) 0%, transparent 70%);
+        }
+
+        body.dark-mode .bg-particles {
+            background: radial-gradient(circle at 50% 50%, rgba(111, 66, 193, 0.15) 0%, #121212 80%);
+        }
+
+        .promo-banner {
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: white;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 10;
+        }
+
+        .countdown-timer {
+            background: rgba(0,0,0,0.25);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        body.dark-mode .card, body.dark-mode .flash-card, body.dark-mode .review-wall-card {
+            background-color: rgba(30, 30, 30, 0.9);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        body.dark-mode .search-input, body.dark-mode .sort-select, body.dark-mode .currency-select, body.dark-mode .lang-select {
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border-color: #444;
+        }
+
+        body.dark-mode .cart-modal, 
+        body.dark-mode .checkout-modal,
+        body.dark-mode .detail-modal,
+        body.dark-mode .admin-modal,
+        body.dark-mode .invoice-modal,
+        body.dark-mode .chat-modal,
+        body.dark-mode .wheel-modal,
+        body.dark-mode .builder-modal,
+        body.dark-mode .mystery-modal,
+        body.dark-mode .compare-modal,
+        body.dark-mode .alert-modal,
+        body.dark-mode .tracker-modal,
+        body.dark-mode .welcome-modal,
+        body.dark-mode .exit-modal,
+        body.dark-mode .ai-modal,
+        body.dark-mode .push-modal,
+        body.dark-mode .dropdown-menu-content {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+
+        body.dark-mode .checkout-input, body.dark-mode .coupon-input, body.dark-mode .admin-input, body.dark-mode .review-input, body.dark-mode .chat-input, body.dark-mode .alert-input, body.dark-mode .tracker-input, body.dark-mode .ai-input {
+            background-color: #2a2a2a;
+            color: #fff;
+            border-color: #444;
+        }
+
+        .header-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 900px;
+            margin: 15px auto 0 auto;
+            padding: 0 15px;
+            gap: 12px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Top-Corner Floating Dropdown Menu (Fixed to Top-Right / Corner) */
+        .top-corner-menu-wrapper {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 99999;
+        }
+
+        .menu-toggle-btn {
+            background: linear-gradient(135deg, #232526, #414345);
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            padding: 9px 16px;
+            border-radius: 22px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
+
+        .menu-toggle-btn:hover {
+            background: var(--primary-color);
+            transform: scale(1.03);
+        }
+
+        .dropdown-menu-content {
+            display: none;
+            position: absolute;
+            top: 48px;
+            right: 0;
+            background-color: white;
+            min-width: 290px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            border-radius: 16px;
+            padding: 14px;
+            z-index: 999999;
+            text-align: left;
+            border: 1px solid rgba(0,0,0,0.15);
+        }
+
+        .dropdown-menu-content.show {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .dropdown-section-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #888;
+            margin: 4px 0 2px 4px;
+            text-transform: uppercase;
+        }
+
+        .dropdown-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .currency-select, .lang-select {
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+            width: 100%;
+        }
+
+        .theme-toggle-btn, .cart-counter-btn, .wish-counter-btn, .admin-btn, .wheel-btn, .builder-btn, .sound-btn, .app-btn, .mystery-btn, .compare-btn-top, .tracker-btn-top, .ai-assistant-btn {
+            color: #ffffff !important;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            flex: 1;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .theme-toggle-btn { background-color: #333; }
+        .cart-counter-btn { background-color: #28a745; }
+        .wish-counter-btn { background-color: #dc3545; }
+        .admin-btn { background-color: var(--primary-color); }
+        .wheel-btn { background-color: #fd7e14; }
+        .builder-btn { background-color: #007bff; }
+        .sound-btn { background-color: #17a2b8; }
+        .app-btn { background-color: #e91e63; }
+        .mystery-btn { background-color: #6610f2; }
+        .compare-btn-top { background-color: #20c997; }
+        .tracker-btn-top { background-color: #fd7e14; }
+        .ai-assistant-btn { background: linear-gradient(135deg, #00c6ff, #0072ff); width: 100%; }
+
+        body.dark-mode .theme-toggle-btn {
+            background-color: #f4f6f9;
+            color: #333 !important;
+        }
+
+        .vip-status-bar {
+            background: linear-gradient(90deg, #ffd700, #ffa500);
+            color: #000;
+            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 5px;
+        }
+
+        .cashback-banner {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .loyalty-banner {
+            background: rgba(111, 66, 193, 0.1);
+            color: var(--primary-color);
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-top: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .trust-badges-container {
+            max-width: 900px;
+            margin: 15px auto;
+            padding: 0 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 10px;
+        }
+
+        .trust-badge-card {
+            background: rgba(40, 167, 69, 0.08);
+            border: 1px solid rgba(40, 167, 69, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #28a745;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        body.dark-mode .trust-badge-card {
+            background: rgba(40, 167, 69, 0.15);
+        }
+
+        .delivery-estimate-banner {
+            background: linear-gradient(90deg, #007bff, #6610f2);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            max-width: 900px;
+            margin: 10px auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .flash-container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 15px;
+            text-align: left;
+        }
+
+        .flash-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff416c;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .flash-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .flash-card {
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .flash-badge {
+            background: #ff416c;
+            color: white;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        .review-wall-container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 15px;
+            text-align: left;
+        }
+
+        .review-wall-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .review-wall-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            font-size: 13px;
+        }
+
+        .deal-timer {
+            font-size: 11px;
+            color: #e63946;
+            font-weight: bold;
+            background: rgba(230, 57, 70, 0.1);
+            padding: 3px 6px;
+            border-radius: 6px;
+            margin: 5px 0;
+            display: inline-block;
+        }
+
+        @keyframes pulseWarning {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.03); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .stock-urgency {
+            font-size: 11px;
+            color: #d9534f;
+            font-weight: bold;
+            background: rgba(217, 83, 79, 0.1);
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-top: 4px;
+            display: inline-block;
+            animation: pulseWarning 1.5s infinite ease-in-out;
+        }
+
+        .stock-urgency.out-of-stock {
+            color: #fff;
+            background: #dc3545;
+            animation: none;
+        }
+
+        .search-container {
+            margin: 15px auto 10px auto;
+            max-width: 900px;
+            display: flex;
+            gap: 10px;
+            padding: 0 15px;
+            flex-direction: column;
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (min-width: 500px) {
+            .search-container { flex-direction: row; }
+        }
+
+        .search-input {
+            flex: 2;
+            padding: 12px 18px;
+            font-size: 15px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+        }
+
+        .sort-select {
+            flex: 1;
+            padding: 12px;
+            font-size: 13px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .category-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 15px auto;
+            max-width: 900px;
+            padding: 0 15px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cat-btn {
+            background-color: #e9ecef;
+            color: #333;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .cat-btn.active, .cat-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        body.dark-mode .cat-btn {
+            background-color: #2a2a2a;
+            color: #ccc;
+        }
+
+        body.dark-mode .cat-btn.active, body.dark-mode .cat-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            max-width: 900px;
+            margin: 20px auto 0 auto;
+            padding: 0 15px;
+            position: relative;
+            z-index: 10;
+        }
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease-out;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        .card img, .flash-card img {
+            max-width: 100%;
+            height: 130px;
+            object-fit: contain;
+            cursor: pointer;
+        }
+
+        .badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+            z-index: 10;
+        }
+
+        .badge-bestseller { background-color: #ff9800; }
+        .badge-new { background-color: #e91e63; }
+        .badge-hot { background-color: #f44336; }
+
+        .heart-icon {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .stars { color: #ffc107; font-size: 14px; margin: 4px 0; }
+        .rating-text { color: #777; font-size: 12px; }
+        body.dark-mode .rating-text { color: #aaa; }
+
+        .card-actions-row {
+            display: flex;
+            gap: 5px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .cart-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .cart-btn:disabled {
+            background-color: #6c757d !important;
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+
+        .compare-toggle-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .compare-toggle-btn.active {
+            background-color: #20c997;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            z-index: 200000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .cart-modal, .checkout-modal, .detail-modal, .admin-modal, .invoice-modal, .chat-modal, .wheel-modal, .builder-modal, .mystery-modal, .compare-modal, .alert-modal, .tracker-modal, .welcome-modal, .exit-modal, .ai-modal, .push-modal {
+            background-color: white;
+            padding: 20px;
+            border-radius: 18px;
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: left;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .cart-modal h2, .checkout-modal h2, .detail-modal h2, .admin-modal h2, .invoice-modal h2, .chat-modal h2, .wheel-modal h2, .builder-modal h2, .mystery-modal h2, .compare-modal h2, .alert-modal h2, .tracker-modal h2, .welcome-modal h2, .exit-modal h2, .ai-modal h2, .push-modal h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .shipping-progress-container {
+            background-color: #e9ecef;
+            border-radius: 10px;
+            height: 12px;
+            width: 100%;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .shipping-progress-bar {
+            background: linear-gradient(90deg, #28a745, #20c997);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .shipping-progress-text {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .cart-items-list { list-style: none; padding: 0; margin: 15px 0; }
+        .cart-items-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        body.dark-mode .cart-items-list li { border-bottom-color: #333; }
+
+        .qty-controls { display: flex; align-items: center; gap: 6px; }
+        .qty-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .edit-btn {
+            background-color: #ffc107;
+            color: #000;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .stock-edit-btn {
+            background-color: #fd7e14;
+            color: #fff;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .coupon-container { display: flex; gap: 8px; margin: 15px 0 10px 0; }
+        .coupon-input, .admin-input, .review-input, .chat-input, .builder-select, .alert-input, .tracker-input, .ai-input, .push-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .coupon-btn, .admin-submit-btn, .whatsapp-cart-btn, .ai-submit-btn, .express-checkout-btn {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: center;
+            display: block;
+            width: 100%;
+            text-decoration: none;
+            margin-top: 8px;
+        }
+
+        .express-checkout-btn { background: linear-gradient(135deg, #ff416c, #ff4b2b); margin-top: 6px; }
+        .coupon-btn { background-color: #17a2b8; width: auto; margin-top: 0; }
+        .admin-submit-btn { background-color: var(--primary-color); width: 100%; margin-top: 10px; padding: 12px; }
+        .ai-submit-btn { background: linear-gradient(135deg, #00c6ff, #0072ff); width: 100%; margin-top: 10px; }
+        .discount-info { color: #28a745; font-size: 13px; font-weight: bold; text-align: right; display: none; }
+        .cart-total { font-weight: bold; font-size: 16px; text-align: right; margin: 10px 0 15px 0; }
+        .modal-actions { display: flex; flex-direction: column; gap: 10px; }
+
+        .checkout-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .close-modal-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .detail-modal img { width: 150px; height: 150px; object-fit: contain; display: block; margin: 0 auto 15px auto; }
+        .stock-badge {
+            display: inline-block;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .reviews-section { margin-top: 15px; border-top: 1px solid #ddd; padding-top: 10px; text-align: left; }
+        .review-item { font-size: 12px; background: #f8f9fa; padding: 8px 12px; border-radius: 8px; margin-bottom: 6px; }
+        body.dark-mode .review-item { background: #2a2a2a; }
+
+        .checkout-form, .admin-form { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+        .checkout-input, .checkout-select { padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; width: 100%; }
+
+        #notification {
+            position: fixed;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: top 0.4s ease-in-out;
+            z-index: 300000;
+            white-space: nowrap;
+        }
+
+        #notification.show { top: 20px; }
+
+        #salesTicker {
+            position: fixed;
+            bottom: -80px;
+            left: 20px;
+            background-color: #333;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 2500;
+            transition: bottom 0.5s ease-in-out;
+        }
+
+        #salesTicker.show { bottom: 20px; }
+
+        /* Social Proof Toast Notification (Bottom Right) */
+        #socialProofToast {
+            position: fixed;
+            bottom: -90px;
+            right: 20px;
+            background: rgba(30, 30, 35, 0.95);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            z-index: 2700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: bottom 0.5s ease-in-out;
+            max-width: 300px;
+            text-align: left;
+        }
+
+        #socialProofToast.show { bottom: 90px; }
+
+        .chat-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 2600;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .chat-toggle-btn:hover { transform: scale(1.1); }
+
+        .whatsapp-float-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 85px;
+            background-color: #25D366;
+            color: white;
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            font-size: 26px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 2600;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s;
+            text-decoration: none;
+        }
+
+        .whatsapp-float-btn:hover { transform: scale(1.1); }
+
+        .chat-box {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .chat-msg {
+            padding: 6px 12px;
+            border-radius: 12px;
+            max-width: 80%;
+        }
+
+        .chat-msg.bot { background-color: #e9ecef; align-self: flex-start; color: #333; }
+        .chat-msg.user { background-color: var(--primary-color); color: white; align-self: flex-end; }
+
+        @media print {
+            body * { visibility: hidden; }
+            #printableInvoice, #printableInvoice * { visibility: visible; }
+            #printableInvoice { position: absolute; left: 0; top: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background -->
+    <div class="bg-particles"></div>
+
+    <!-- زر القائمة المنسدلة المثبت في أقصى الزاوية العليا اليمين لجميع الأجهزة -->
+    <div class="top-corner-menu-wrapper">
+        <button class="menu-toggle-btn" onclick="toggleDropdownMenu()">⚙️ Store Options ▾</button>
+        <div class="dropdown-menu-content" id="dropdownMenuContent">
+            
+            <div class="dropdown-section-title">🌍 Sprachen & Währungen</div>
+            <select id="langSelect" class="lang-select" onchange="changeLanguage()">
+                <option value="de">🇩🇪 Deutsch (DE)</option>
+                <option value="ar">🇸🇦 العربية (AR)</option>
+                <option value="en">🇬🇧 English (EN)</option>
+                <option value="fr">🇫🇷 Français (FR)</option>
+                <option value="es">🇪🇸 Español (ES)</option>
+                <option value="it">🇮🇹 Italiano (IT)</option>
+                <option value="tr">🇹🇷 Türkçe (TR)</option>
+                <option value="ru">🇷🇺 Русский (RU)</option>
+                <option value="zh">🇨🇳 中文 (ZH)</option>
+                <option value="ja">🇯🇵 日本語 (JA)</option>
+                <option value="hi">🇮🇳 हिन्दी (HI)</option>
+            </select>
+
+            <select id="currencySelect" class="currency-select" onchange="changeCurrency()" style="margin-top:6px;">
+                <option value="EUR">EUR (€) - Euro</option>
+                <option value="USD">USD ($) - US Dollar</option>
+                <option value="GBP">GBP (£) - British Pound</option>
+                <option value="SAR">SAR (ر.س) - Saudi Riyal</option>
+                <option value="AED">AED (د.إ) - UAE Dirham</option>
+                <option value="EGP">EGP (ج.م) - Egyptian Pound</option>
+                <option value="TRY">TRY (₺) - Turkish Lira</option>
+                <option value="JPY">JPY (¥) - Japanese Yen</option>
+                <option value="CNY">CNY (¥) - Chinese Yuan</option>
+                <option value="INR">INR (₹) - Indian Rupee</option>
+                <option value="CAD">CAD ($) - Canadian Dollar</option>
+                <option value="AUD">AUD ($) - Australian Dollar</option>
+                <option value="CHF">CHF (CHF) - Swiss Franc</option>
+            </select>
+
+            <div class="dropdown-section-title" style="margin-top:8px;">🎮 Gaming & Features</div>
+            <div class="dropdown-row">
+                <button class="mystery-btn" onclick="playClickSound(); toggleMysteryModal()">🎁 Mystery</button>
+                <button class="wheel-btn" onclick="playClickSound(); toggleWheelModal()">🎡 Glücksrad</button>
+            </div>
+            <div class="dropdown-row">
+                <button class="builder-btn" onclick="playClickSound(); toggleBuilderModal()">💻 PC Builder</button>
+                <button class="compare-btn-top" onclick="playClickSound(); openCompareModal()">📊 Vergleic.</button>
+            </div>
+
+            <div class="dropdown-section-title" style="margin-top:8px;">⚙️ System & Admin</div>
+            <div class="dropdown-row">
+                <button class="tracker-btn-top" onclick="playClickSound(); toggleTrackerModal()">📦 Sendung</button>
+                <button class="sound-btn" id="soundBtn" onclick="toggleSound()">🔊 Audio</button>
+            </div>
+            <div class="dropdown-row">
+                <button class="app-btn" onclick="installPwaApp()">📱 App</button>
+                <button class="admin-btn" onclick="playClickSound(); toggleAdminModal()">⚙️ Admin</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Social Proof Toast Notification Box -->
+    <div id="socialProofToast">
+        <span style="font-size: 20px;">🔥</span>
+        <div>
+            <div style="font-weight: bold; color: #ffcc00;" id="spName">Max aus Berlin</div>
+            <div style="color: #ddd; font-size: 11px;" id="spAction">hat gerade NVIDIA RTX 3090 Ti gekauft!</div>
+        </div>
+    </div>
+
+    <!-- Exit Intent Modal Popup -->
+    <div class="modal-overlay" id="exitModalOverlay">
+        <div class="exit-modal">
+            <h2>⏳ Warte! Nicht so schnell!</h2>
+            <p style="font-size:14px; color:#666; text-align:center;">Möchtest du gehen, ohne zu sparen? Nutze diesen exklusiven Willkommens-Gutschein für 10% Rabatt:</p>
+            <div style="background: rgba(255, 65, 108, 0.1); padding: 12px; border-radius: 10px; text-align: center; margin: 15px 0;">
+                <span style="font-size: 13px; font-weight: bold; color: #ff416c;">🎁 Dein Sonder-Gutschein:</span><br>
+                <code style="font-size: 18px; font-weight: bold; color: var(--primary-color); background: white; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-top: 5px;">GAMING10</code>
+            </div>
+            <button class="checkout-btn" style="width:100%;" onclick="closeExitModal()">Mit Rabatt einkaufen 🚀</button>
+        </div>
+    </div>
+
+    <!-- Welcome Modal Popup -->
+    <div class="modal-overlay" id="welcomeModalOverlay" style="display: flex;">
+        <div class="welcome-modal">
+            <h2>👋 Willkommen bei Mohamad Gaming Store!</h2>
+            <p style="font-size:14px; color:#666; text-align:center;">Entdecke hochwertige Gaming-Hardware und Zubehör zum Tiefpreis direkt von Mohamad!</p>
+            <div style="background: rgba(0, 123, 255, 0.1); padding: 12px; border-radius: 10px; text-align: center; margin: 15px 0;">
+                <span style="font-size: 13px; font-weight: bold; color: var(--primary-color);">🎁 Dein Willkommens-Gutschein (10% Rabatt):</span><br>
+                <code style="font-size: 16px; font-weight: bold; color: #ff416c; background: white; padding: 4px 8px; border-radius: 6px; display: inline-block; margin-top: 5px;">GAMING10</code>
+            </div>
+            <button class="checkout-btn" style="width:100%;" onclick="closeWelcomeModal()">Jetzt einkaufen starten 🚀</button>
+        </div>
+    </div>
+
+    <!-- Push Notification Modal -->
+    <div class="modal-overlay" id="pushModalOverlay">
+        <div class="push-modal">
+            <h2>🔔 Push-Benachrichtigungen aktivieren</h2>
+            <p style="font-size:13px; color:#666; text-align:center;">Erhalte blitzschnelle Updates über neue Grafikkarten-Tiefpreise und Blitzangebote direkt auf dein Gerät!</p>
+            <div style="display:flex; flex-direction:column; gap:10px; margin: 15px 0;">
+                <input type="text" id="pushEmailInput" class="push-input" placeholder="Deine E-Mail für Push-Alerts...">
+                <button class="checkout-btn" onclick="subscribePushAlerts()">Abonnieren & 50 XP sichern ⚡</button>
+            </div>
+            <button class="close-modal-btn" style="width:100%;" onclick="togglePushModal()">Später</button>
+        </div>
+    </div>
+
+    <!-- Mini Promo Floating Box -->
+    <div class="promo-banner-mini" style="position: fixed; top: 20px; left: 20px; z-index: 9999; background: rgba(18, 18, 24, 0.92); border: 1px solid rgba(255, 215, 0, 0.3); backdrop-filter: blur(8px); padding: 10px 14px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); display: flex; align-items: center; gap: 12px; max-width: 360px; font-size: 11px; color: #ffffff;">
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-weight: 600; color: #f1f1f1;">🔥 Direktverkauf: Gaming-Hardware zum Tiefpreis!</span>
+            <span style="color: #ffcc00; font-size: 10px;">✉️ mohameddayeh44@gmail.com</span>
+        </div>
+        <div id="countdown" style="background: linear-gradient(135deg, #ff416c, #ff4b2b); color: #ffffff; font-weight: bold; font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(255, 65, 108, 0.4);">04:57:56</div>
+    </div>
+
+    <!-- Live Sales Ticker -->
+    <div id="salesTicker">🔥 Max aus Berlin hat gerade PS5 Controller bei Mohamad gekauft!</div>
+
+    <!-- Floating Chat & Direct WhatsApp Support -->
+    <button class="chat-toggle-btn" onclick="playClickSound(); toggleChatModal()" title="Support Bot">💬</button>
+    <a href="https://wa.me/?text=Hallo%20Mohamad,%20ich%20habe%20eine%20Frage%20zu%20deinem%20Gaming%20Store!" target="_blank" class="whatsapp-float-btn" title="Direkt per WhatsApp fragen">💬</a>
+
+    <!-- Notification -->
+    <div id="notification">Produkt hinzugefügt!</div>
+
+    <!-- AI Smart Search & Assistant Modal -->
+    <div class="modal-overlay" id="aiModalOverlay">
+        <div class="ai-modal">
+            <h2>🤖 AI Smart Shopping Assistant</h2>
+            <p style="font-size:13px; color:#666; text-align:center;">Beschreibe, was du suchst (z.B. "Grafikkarte für Gaming" oder "Günstiges Zubehör"), und unser KI-Assistent findet es sofort!</p>
+            <div style="display:flex; flex-direction:column; gap:10px; margin: 15px 0;">
+                <input type="text" id="aiQueryInput" class="ai-input" placeholder="Wonach suchst du genau?">
+                <button class="ai-submit-btn" onclick="runAiSearchAssistant()">Mit KI analysieren ⚡</button>
+            </div>
+            <div id="aiResultArea" style="font-size:13px; margin-top:10px; background:rgba(0,198,255,0.08); padding:10px; border-radius:8px; display:none;"></div>
+            <button class="close-modal-btn" style="width:100%; margin-top:10px;" onclick="toggleAiModal()">Schließen</button>
+        </div>
+    </div>
+
+    <!-- Shipment Tracker Modal -->
+    <div class="modal-overlay" id="trackerModalOverlay">
+        <div class="tracker-modal">
+            <h2>📦 Live Sendungsverfolgung</h2>
+            <p style="font-size:13px; color:#666; text-align:center;">Gib deine Bestellnummer ein, um den Status zu prüfen:</p>
+            <div style="display:flex; flex-direction:column; gap:10px; margin: 15px 0;">
+                <input type="text" id="trackerId" class="tracker-input" placeholder="z.B. #1042">
+                <button class="checkout-btn" onclick="trackOrder()">Status prüfen 🔍</button>
+            </div>
+            <div id="trackerResult" style="font-size:13px; font-weight:bold; text-align:center; margin-top:10px; color:#28a745;"></div>
+            <button class="close-modal-btn" style="width:100%; margin-top:15px;" onclick="toggleTrackerModal()">Schließen</button>
+        </div>
+    </div>
+
+    <!-- Stock & Price Alert Modal -->
+    <div class="modal-overlay" id="alertModalOverlay">
+        <div class="alert-modal">
+            <h2>🔔 Preis- & Lager-Alarm</h2>
+            <p style="font-size:13px; color:#666; text-align:center;">Erhalte eine Benachrichtigung per E-Mail, wenn der Preis sinkt oder das Produkt wieder verfügbar ist!</p>
+            <div style="display:flex; flex-direction:column; gap:10px; margin: 15px 0;">
+                <input type="email" id="alertEmail" class="alert-input" placeholder="Deine E-Mail Adresse..." required>
+                <button class="checkout-btn" onclick="submitAlert()">Benachrichtigung aktivieren 🔔</button>
+            </div>
+            <button class="close-modal-btn" style="width:100%;" onclick="toggleAlertModal()">Schließen</button>
+        </div>
+    </div>
+
+    <!-- Product Comparison Modal -->
+    <div class="modal-overlay" id="compareModalOverlay">
+        <div class="compare-modal">
+            <h2>📊 Produktvergleich</h2>
+            <div id="compareContent" style="font-size:13px; margin: 15px 0; overflow-x:auto;"></div>
+            <div class="modal-actions">
+                <button class="close-modal-btn" onclick="toggleCompareModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mystery Box Modal -->
+    <div class="modal-overlay" id="mysteryModalOverlay">
+        <div class="mystery-modal">
+            <h2>🎁 Tägliche Mystery Box</h2>
+            <p style="text-align:center; font-size:14px; color:#666;">Öffne das tägliche Geschenk und erhalte eine Überraschung!</p>
+            <div id="mysteryResult" style="text-align:center; font-weight:bold; font-size:18px; color:#6610f2; margin: 20px 0;">📦 Klicke auf Öffnen!</div>
+            <div class="modal-actions">
+                <button class="checkout-btn" style="background-color:#6610f2;" onclick="openMysteryBox()">🎁 Geschenk öffnen!</button>
+                <button class="close-modal-btn" onclick="toggleMysteryModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PC Builder Modal with AI Bottleneck Calculator & RGB Theme Picker -->
+    <div class="modal-overlay" id="builderModalOverlay">
+        <div class="builder-modal">
+            <h2>💻 AI PC-Konfigurator & Bottleneck Calculator</h2>
+            <p style="font-size:13px; color:#666; text-align:center;">Stelle deinen Wunsch-PC zusammen, prüfe den Flaschenhals (Bottleneck) und teste die Performance!</p>
+            
+            <div style="display:flex; flex-direction:column; gap:10px; margin: 15px 0;">
+                <label style="font-size:12px; font-weight:bold;">1. Prozessor (CPU):</label>
+                <select id="buildCpu" class="builder-select" onchange="calculateBuilderTotal()">
+                    <option value="0" data-tier="1">-- Bitte wählen --</option>
+                    <option value="350" data-tier="2">Prozessor (CPU i5/Ryzen 5) - 350 €</option>
+                    <option value="550" data-tier="3">High-End Prozessor (i7/Ryzen 7) - 550 €</option>
+                </select>
+
+                <label style="font-size:12px; font-weight:bold;">2. Grafikkarte (GPU):</label>
+                <select id="buildGpu" class="builder-select" onchange="calculateBuilderTotal()">
+                    <option value="0" data-tier="1">-- Bitte wählen --</option>
+                    <option value="480" data-tier="2">Grafikkarte (Mid-Range) - 480 €</option>
+                    <option value="1200" data-tier="3">NVIDIA RTX 3090 Ti (Enthusiast) - 1200 €</option>
+                </select>
+
+                <label style="font-size:12px; font-weight:bold;">3. Arbeits- & SSD Speicher:</label>
+                <select id="buildRam" class="builder-select" onchange="calculateBuilderTotal()">
+                    <option value="0">-- Bitte wählen --</option>
+                    <option value="110">32GB DDR5 RAM - 110 €</option>
+                    <option value="200">32GB RAM + 1TB NVMe SSD - 200 €</option>
+                </select>
+
+                <label style="font-size:12px; font-weight:bold;">🎨 RGB Gehäuse-Beleuchtung (AI Preview):</label>
+                <div style="display:flex; gap:8px;">
+                    <button type="button" onclick="setRgbTheme('#ff0055')" style="flex:1; background:#ff0055; color:white; border:none; padding:6px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:bold;">Neon Pink</button>
+                    <button type="button" onclick="setRgbTheme('#00ffcc')" style="flex:1; background:#00ffcc; color:#000; border:none; padding:6px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:bold;">Cyber Cyan</button>
+                    <button type="button" onclick="setRgbTheme('#9400d3')" style="flex:1; background:#9400d3; color:white; border:none; padding:6px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:bold;">Deep Purple</button>
+                </div>
+            </div>
+
+            <div id="builderAnalysis" style="background: rgba(0, 123, 255, 0.08); padding: 12px; border-radius: 10px; font-size: 12px; margin-bottom: 15px; border: 1px solid rgba(0, 123, 255, 0.2);">
+                <b>🔍 AI Bottleneck & Performance Analyse:</b> Wähle Komponenten aus, um die Leistungsberechnung zu starten.
+            </div>
+
+            <div class="cart-total" id="builderTotal">Gesamt: 0 €</div>
+            <div class="modal-actions">
+                <button class="checkout-btn" onclick="addCustomPcToCart()">Wunsch-PC in den Warenkorb 🛒</button>
+                <button class="close-modal-btn" onclick="toggleBuilderModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wheel Modal -->
+    <div class="modal-overlay" id="wheelModalOverlay">
+        <div class="wheel-modal">
+            <h2>🎁 Glücksrad: Rabatt gewinnen!</h2>
+            <p style="text-align:center; font-size:14px; color:#666;">Klicke auf den Button, um deinen Rabattcode zu erhalten!</p>
+            <div id="wheelResult" style="text-align:center; font-weight:bold; font-size:18px; color:#28a745; margin: 20px 0;">Drücke auf "Drehen"!</div>
+            <div class="modal-actions">
+                <button class="checkout-btn" onclick="spinWheel()">🎡 Jetzt drehen!</button>
+                <button class="close-modal-btn" onclick="toggleWheelModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Chat Modal -->
+    <div class="modal-overlay" id="chatModalOverlay">
+        <div class="chat-modal">
+            <h2>💬 Mohamad Support Bot</h2>
+            <div class="chat-box" id="chatBox">
+                <div class="chat-msg bot">Hallo! 👋 Bei Fragen oder Problemen kannst du Mohamad direkt unter <a href="mailto:mohameddayeh44@gmail.com">mohameddayeh44@gmail.com</a> kontaktieren! Wie kann ich dir helfen?</div>
+            </div>
+            <div style="display:flex; gap:6px;">
+                <input type="text" id="chatInput" class="chat-input" placeholder="Nachricht schreiben..." onkeydown="if(event.key==='Enter') sendChatMessage()">
+                <button class="coupon-btn" onclick="sendChatMessage()">Senden</button>
+            </div>
+            <button class="close-modal-btn" style="width:100%; margin-top:10px;" onclick="toggleChatModal()">Schließen</button>
+        </div>
+    </div>
+
+    <!-- Cart Modal with AI Recommendations & 1-Click Express Checkout -->
+    <div class="modal-overlay" id="cartModalOverlay">
+        <div class="cart-modal">
+            <h2 id="txtCartTitle">🛒 Dein Warenkorb</h2>
+            
+            <div class="shipping-progress-text" id="shippingProgressText">Noch 100 € für KOSTENLOSEN Versand!</div>
+            <div class="shipping-progress-container">
+                <div class="shipping-progress-bar" id="shippingProgressBar"></div>
+            </div>
+
+            <ul class="cart-items-list" id="cartItemsList"></ul>
+
+            <div id="cartRecommendations" style="background: rgba(111, 66, 193, 0.05); border: 1px dashed var(--primary-color); padding: 10px; border-radius: 10px; margin: 12px 0;">
+                <div style="font-size: 12px; font-weight: bold; color: var(--primary-color); margin-bottom: 6px;">💡 AI Smart Empfehlung (Häufig zusammen gekauft):</div>
+                <div id="aiRecoItem" style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                    <span id="aiSuggestedText">⚡ 32GB RAM Upgrade Kit</span>
+                    <button class="coupon-btn" style="padding: 4px 8px; font-size: 11px;" onclick="addAiRecommendationToCart()">Hinzufügen</button>
+                </div>
+            </div>
+            
+            <div class="coupon-container">
+                <input type="text" id="couponInput" class="coupon-input" placeholder="Gutschein (z. B. GAMING10)">
+                <button class="coupon-btn" id="txtApply" onclick="applyCoupon()">Einlösen</button>
+            </div>
+            <div class="discount-info" id="discountInfo">10% Rabatt angewendet! 🎉</div>
+
+            <div style="background: rgba(111, 66, 193, 0.08); padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 12px; display:flex; justify-content:space-between; align-items:center;">
+                <span>⭐ Treuepunkte: <b id="loyaltyPointsDisplay">0</b> Pts</span>
+                <button class="coupon-btn" style="padding:6px 10px; font-size:11px;" onclick="redeemLoyaltyPoints()">Punkte einlösen (5€ Rabatt)</button>
+            </div>
+
+            <div class="cart-total" id="cartTotal">Gesamt: 0 €</div>
+            
+            <!-- 1-Click Express Checkout Button -->
+            <button class="express-checkout-btn" onclick="expressCheckoutOneClick()">⚡ 1-Click Express Bestellen 🚀</button>
+            
+            <a id="whatsappCartBtn" href="#" target="_blank" class="whatsapp-cart-btn" onclick="sendCartToWhatsApp()">💬 Direkt per WhatsApp bestellen 📱</a>
+
+            <div class="modal-actions" style="margin-top:10px;">
+                <button class="checkout-btn" id="txtToCheckout" onclick="openCheckoutModal()">Zur Kasse gehen 💳</button>
+                <button class="close-modal-btn" id="txtCloseCart" onclick="toggleCartModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wishlist Modal -->
+    <div class="modal-overlay" id="wishlistModalOverlay">
+        <div class="cart-modal">
+            <h2 id="txtWishTitle">❤️ Deine Wunschliste</h2>
+            <ul class="cart-items-list" id="wishlistItemsList"></ul>
+            <div class="modal-actions">
+                <button class="close-modal-btn" id="txtCloseWish" onclick="toggleWishlistModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div class="modal-overlay" id="adminModalOverlay">
+        <div class="admin-modal">
+            <h2>⚙️ Mohamad Store Management</h2>
+            <p style="font-size:12px; color:#666; text-align:center;">Füge neue Produkte hinzu, verwalte Preise/Lager/Löschung oder hake Bestellungen ab!</p>
+            
+            <div style="background:rgba(0,0,0,0.03); padding:10px; border-radius:8px; margin-bottom:15px; text-align:center;">
+                <label style="font-size:12px; font-weight:bold; display:block; margin-bottom:5px;">🎨 Website-Farbschema wählen:</label>
+                <div style="display:flex; justify-content:center; gap:8px;">
+                    <button onclick="setThemeColor('#6f42c1')" style="background:#6f42c1; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:bold;">Purple</button>
+                    <button onclick="setThemeColor('#28a745')" style="background:#28a745; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:bold;">Razer Green</button>
+                    <button onclick="setThemeColor('#007bff')" style="background:#007bff; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:bold;">Electric Blue</button>
+                    <button onclick="setThemeColor('#dc3545')" style="background:#dc3545; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:11px; font-weight:bold;">Neon Red</button>
+                </div>
+            </div>
+
+            <form class="admin-form" onsubmit="addNewProduct(event)">
+                <h4 style="margin:5px 0; color:var(--primary-color);">+ Neues Produkt hinzufügen</h4>
+                <input type="text" id="adminTitle" class="admin-input" placeholder="Produktname" required>
+                <input type="number" id="adminPrice" class="admin-input" placeholder="Preis in €" required>
+                <input type="number" id="adminStock" class="admin-input" placeholder="Lagerbestand (z.B. 5)" value="3" required>
+                <input type="text" id="adminImg" class="admin-input" placeholder="Bild Name (z.B. CPU.jpg)" required>
+                <select id="adminCat" class="admin-input" required>
+                    <option value="hardware">PC-Hardware</option>
+                    <option value="peripherie">Zubehör</option>
+                    <option value="apple">Apple Zubehör</option>
+                    <option value="samsung">Samsung Zubehör</option>
+                    <option value="gaming">Gaming & Konsolen</option>
+                </select>
+                <input type="text" id="adminDesc" class="admin-input" placeholder="Kurze Beschreibung" required>
+                <button type="submit" class="admin-submit-btn">+ Produkt direkt speichern 🚀</button>
+            </form>
+
+            <hr style="margin:20px 0; border:0; border-top:1px solid #ccc;">
+
+            <div>
+                <h4 style="margin:5px 0; color:#dc3545;">✏️ Produkt-Verwaltung (Preise, Lager & Löschen)</h4>
+                <div id="adminProductsListContainer" style="max-height:180px; overflow-y:auto; margin-top:10px; border:1px solid #ddd; padding:8px; border-radius:8px; font-size:12px; background:rgba(0,0,0,0.02);"></div>
+            </div>
+
+            <hr style="margin:20px 0; border:0; border-top:1px solid #ccc;">
+
+            <div>
+                <h4 style="margin:5px 0; color:#28a745;">📦 Kunden-Bestellungen & Checklisten</h4>
+                <div id="adminOrdersContainer" style="max-height:180px; overflow-y:auto; margin-top:10px; border:1px solid #ddd; padding:8px; border-radius:8px; font-size:12px; background:rgba(0,0,0,0.02);"></div>
+            </div>
+
+            <hr style="margin:20px 0; border:0; border-top:1px solid #ccc;">
+            <button class="close-modal-btn" onclick="closeAdminModal()">Schließen</button>
+        </div>
+    </div>
+
+    <!-- Detail Modal with Live Review & Photo Upload Support -->
+    <div class="modal-overlay" id="detailModalOverlay">
+        <div class="detail-modal">
+            <h2 id="detailTitle">Produktname</h2>
+            <img id="detailImg" src="" alt="">
+            <div style="text-align:center;">
+                <span class="stock-badge" id="txtStock">✓ Auf Lager (Lieferzeit: 1-2 Werktage)</span>
+                <div id="detailStockUrgency" class="stock-urgency" style="margin-bottom:8px;">🔥 Nur noch 3 auf Lager!</div>
+                <button onclick="toggleAlertModal()" style="background:none; border:none; color:var(--primary-color); font-size:12px; cursor:pointer; display:block; margin: 5px auto;">🔔 Bei Preissenkung benachrichtigen</button>
+            </div>
+            <p id="detailDesc" style="font-size:14px; line-height:1.4; color:#555;"></p>
+            <div class="stars" id="detailStars">★★★★★</div>
+            <p style="font-weight:bold; font-size:18px; margin: 10px 0;" id="detailPrice">0 €</p>
+            
+            <div class="reviews-section">
+                <h4 id="txtReviewsHead">Kundenbewertungen & Fotos 💬</h4>
+                <div id="reviewsContainer"></div>
+                <div style="display:flex; flex-direction:column; gap:5px; margin-top:8px;">
+                    <input type="text" id="newReviewText" class="review-input" placeholder="Dein Kommentar / Bewertung...">
+                    <input type="file" id="newReviewFile" class="review-input" accept="image/*" style="font-size:11px;">
+                    <button class="coupon-btn" onclick="addLiveReviewWithPhoto()">Bewertung & Foto absenden 📸</button>
+                </div>
+            </div>
+
+            <div class="modal-actions" style="margin-top:15px;">
+                <button class="checkout-btn" id="detailAddBtn">In den Warenkorb 🛒</button>
+                <button class="close-modal-btn" onclick="closeDetailModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal-overlay" id="checkoutModalOverlay">
+        <div class="checkout-modal">
+            <h2 id="txtCheckoutHead">📝 Bestellung abschließen</h2>
+            <form class="checkout-form" onsubmit="completeOrder(event)">
+                <input type="text" id="custName" class="checkout-input" placeholder="Vollständiger Name..." required>
+                <input type="email" id="custEmail" class="checkout-input" placeholder="E-Mail Adresse" required>
+                <input type="text" id="custAddress" class="checkout-input" placeholder="Lieferadresse & Land" required>
+                
+                <select id="shippingMethod" class="checkout-select checkout-input" onchange="updateCheckoutTotal()" required>
+                    <option value="4.90">🚚 DHL Standard (Deutschland) - 4,90 €</option>
+                    <option value="9.90">⚡ DHL Express 24h (Deutschland) - 9,90 €</option>
+                    <option value="3.90">📦 Hermes Paket (Deutschland) - 3,90 €</option>
+                    <option value="14.90">✈️ DHL Express International (Weltweit) - 14,90 €</option>
+                </select>
+
+                <select id="custPay" class="checkout-select checkout-input" required>
+                    <option value="">-- Zahlungsart wählen --</option>
+                    <option value="PayPal">PayPal</option>
+                    <option value="Kreditkarte">Kreditkarte</option>
+                    <option value="Klarna">Klarna / Sofortüberweisung</option>
+                    <option value="Apple/Google Pay">Apple Pay / Google Pay</option>
+                    <option value="Vorkasse">Vorkasse / Banküberweisung</option>
+                </select>
+
+                <div style="display:flex; align-items:center; gap:8px; font-size:13px; margin: 4px 0;">
+                    <input type="checkbox" id="giftWrap" onchange="updateCheckoutTotal()">
+                    <label for="giftWrap" id="txtGiftOption">🎁 Als Geschenk verpacken & Grußkarte (+ 2,50 €)</label>
+                </div>
+
+                <div class="cart-total" id="checkoutTotal">Gesamtbetrag: 0 €</div>
+                <button type="submit" class="checkout-btn" id="txtBuyBtn">Jetzt kostenpflichtig bestellen 🚀</button>
+                <button type="button" class="close-modal-btn" onclick="closeCheckoutModal()">Zurück zum Warenkorb</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div class="modal-overlay" id="invoiceModalOverlay">
+        <div class="invoice-modal" id="printableInvoice">
+            <h2>📄 Mohamad Store - Rechnung</h2>
+            <p><b>Bestell-Nr:</b> #<span id="invNum">1001</span></p>
+            <p><b>Kunde:</b> <span id="invName"></span></p>
+            <p><b>Lieferadresse:</b> <span id="invAddr"></span></p>
+            <p><b>Versandart:</b> <span id="invShipping"></span></p>
+            <p><b>Zahlungsart:</b> <span id="invPay"></span></p>
+            <p><b>Geschenkoption:</b> <span id="invGift">Nein</span></p>
+            <hr>
+            <h4>Bestellte Artikel (Direktverkauf):</h4>
+            <ul id="invItems" style="list-style:none; padding:0; font-size:14px;"></ul>
+            <p style="font-size:12px; color:#555; margin-top:10px;">Bei Fragen oder Problemen kontaktiere Mohamad direkt unter: <a href="mailto:mohameddayeh44@gmail.com">mohameddayeh44@gmail.com</a></p>
+            <hr>
+            <h3 style="text-align:right;" id="invTotal">Gesamt: 0 €</h3>
+            <div class="modal-actions">
+                <button class="checkout-btn" onclick="window.print()">Rechnung drucken 🖨️</button>
+                <button class="close-modal-btn" onclick="closeInvoiceModal()">Schließen & Fertig</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header-container">
+        <h1 id="txtStoreTitle" style="margin:0;">Mohamad Gaming Store</h1>
+        <div class="vip-status-bar" id="vipStatus">🏆 XP: <span id="xpPoints">0</span> | Rank: <span id="rankTitle">Gamer Bronze 🥉</span></div>
+        <div class="cashback-banner">💰 Dein Cashback Guthaben: <span id="cashbackBalance">0.00</span> € (5% Erstattung)</div>
+        <div class="loyalty-banner">⭐ Treuepunkte: <span id="loyaltyPointsHeader">0</span> Pts (10 Pts = 1 €)</div>
+        
+        <div class="header-actions">
+            <!-- الأساسيات البارزة مباشرة في الهيدر -->
+            <button class="ai-assistant-btn" onclick="playClickSound(); toggleAiModal()">🤖 AI Assistant</button>
+            <button class="wish-counter-btn" onclick="playClickSound(); toggleWishlistModal()">❤️ (<span id="wishCount">0</span>)</button>
+            <button class="cart-counter-btn" onclick="playClickSound(); toggleCartModal()">🛒 (<span id="cartCount">0</span>)</button>
+            <button class="theme-toggle-btn" id="themeBtn" onclick="playClickSound(); toggleDarkMode()">🌙 Dark Mode</button>
+        </div>
+    </div>
+
+    <!-- شريط موعد التوصيل الدقيق الذكي -->
+    <div class="delivery-estimate-banner" id="deliveryBanner">
+        ⚡ <b>Blitz-Lieferung:</b> Bestelle jetzt innerhalb der nächsten 4 Stunden und erhalte dein Paket voraussichtlich am <b>Donnerstag</b>!
+    </div>
+
+    <div class="trust-badges-container">
+        <div class="trust-badge-card">🛡️ 100% Originale Gaming Hardware direkt von Mohamad</div>
+        <div class="trust-badge-card" id="savingsTickerCard">💡 20% Günstiger als große Konkurrenten (Direktverkauf)</div>
+        <div class="trust-badge-card">⚡ 30 Tage Geld-Zurück-Garantie & Blitzversand</div>
+    </div>
+
+    <!-- Advanced Sidebar & Search Layout -->
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Produkte suchen... 🔍" oninput="filterProducts()">
+        <select id="sortSelect" class="sort-select" onchange="sortProducts()">
+            <option value="default" id="optSortDef">Standard Sortierung</option>
+            <option value="low-high" id="optSortLow">Preis: Günstig -> Teuer</option>
+            <option value="high-low" id="optSortHigh">Preis: Teuer -> Günstig</option>
+        </select>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="category-container">
+        <button class="cat-btn active" id="btnCatAll" onclick="filterCategory('all', this)">Alle</button>
+        <button class="cat-btn" id="btnCatHw" onclick="filterCategory('hardware', this)">PC-Hardware</button>
+        <button class="cat-btn" id="btnCatAcc" onclick="filterCategory('peripherie', this)">Zubehör</button>
+        <button class="cat-btn" id="btnCatApple" onclick="filterCategory('apple', this)">Apple Zubehör</button>
+        <button class="cat-btn" id="btnCatSamsung" onclick="filterCategory('samsung', this)">Samsung Zubehör</button>
+        <button class="cat-btn" id="btnCatGaming" onclick="filterCategory('gaming', this)">Gaming & Konsolen</button>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-container" id="productsContainer"></div>
+
+    <!-- Customer Review Wall -->
+    <div class="review-wall-container">
+        <div class="flash-title">🌟 Was Gamer über Mohamad Store sagen</div>
+        <div class="review-wall-grid">
+            <div class="review-wall-card">
+                <div class="stars">★★★★★</div>
+                <p><b>Max M. (Berlin):</b> „Unschlagbare Preise direkt von Mohamad! Bei Fragen direkt per E-Mail (<a href="mailto:mohameddayeh44@gmail.com">mohameddayeh44@gmail.com</a>) schnelle Hilfe erhalten.“</p>
+            </div>
+            <div class="review-wall-card">
+                <div class="stars">★★★★★</div>
+                <p><b>Sarah K. (Hamburg):</b> „Bester Shop für Gaming-Hardware. Super schnelle Lieferung und fairer Direktverkauf!“</p>
+            </div>
+            <div class="review-wall-card">
+                <div class="stars">★★★★★</div>
+                <p><b>Ali A. (Köln):</b> „Dank Mohamad's Tiefpreisen und Gutschein ordentlich gespart. Top Qualität!“</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            'de': {
+                title: 'Mohamad Gaming Store',
+                search: 'Produkte suchen... 🔍',
+                catAll: 'Alle', catHw: 'PC-Hardware', catAcc: 'Zubehör', catApple: 'Apple Zubehör', catSamsung: 'Samsung Zubehör', catGaming: 'Gaming & Konsolen',
+                cartTitle: '🛒 Dein Warenkorb', wishTitle: '❤️ Deine Wunschliste',
+                apply: 'Einlösen', toCheckout: 'Zur Kasse gehen 💳', close: 'Schließen',
+                stock: '✓ Auf Lager (Lieferzeit: 1-2 Werktage)', reviewsHead: 'Kundenbewertungen & Fotos 💬',
+                checkoutHead: '📝 Bestellung abschließen', giftOption: '🎁 Als Geschenk verpacken & Grußkarte (+ 2,50 €)',
+                buyBtn: 'Jetzt kostenpflichtig bestellen 🚀', sortDef: 'Standard Sortierung',
+                sortLow: 'Preis: Günstig -> Teuer', sortHigh: 'Preis: Teuer -> Günstig'
+            },
+            'ar': {
+                title: 'متجر محمد للألعاب',
+                search: 'البحث عن المنتجات... 🔍',
+                catAll: 'الكل', catHw: 'قطع الكمبيوتر', catAcc: 'الملحقات', catApple: 'ملحقات أبل', catSamsung: 'ملحقات سامسونج', catGaming: 'الألعاب والأجهزة',
+                cartTitle: '🛒 سلة التسوق الخاصة بك', wishTitle: '❤️ قائمة الرغبات',
+                apply: 'تطبيق', toCheckout: 'الذهاب للدفع 💳', close: 'إغلاق',
+                stock: '✓ متوفر في المخزون (الشحن: 1-2 أيام عمل)', reviewsHead: 'تقييمات العملاء والصور 💬',
+                checkoutHead: '📝 إتمام الطلب', giftOption: '🎁 تغليف كهدية ومعايدة (+ 2.50 €)',
+                buyBtn: 'تأكيد الشراء الآن 🚀', sortDef: 'الترتيب الافتراضي',
+                sortLow: 'السعر: من الأرخص للأعلى', sortHigh: 'السعر: من الأعلى للأرخص'
+            },
+            'en': {
+                title: 'Mohamad Gaming Store',
+                search: 'Search products... 🔍',
+                catAll: 'All', catHw: 'PC Hardware', catAcc: 'Accessories', catApple: 'Apple Accessories', catSamsung: 'Samsung Accessories', catGaming: 'Gaming & Consoles',
+                cartTitle: '🛒 Your Shopping Cart', wishTitle: '❤️ Your Wishlist',
+                apply: 'Apply', toCheckout: 'Proceed to Checkout 💳', close: 'Close',
+                stock: '✓ In Stock (Delivery: 1-2 working days)', reviewsHead: 'Customer Reviews & Photos 💬',
+                checkoutHead: '📝 Complete Order', giftOption: '🎁 Wrap as gift & card (+ €2.50)',
+                buyBtn: 'Order Now 🚀', sortDef: 'Default Sorting',
+                sortLow: 'Price: Low to High', sortHigh: 'Price: High to Low'
+            },
+            'fr': {
+                title: 'Mohamad Gaming Store',
+                search: 'Rechercher des produits... 🔍',
+                catAll: 'Tous', catHw: 'Composants PC', catAcc: 'Accessoires', catApple: 'Accessoires Apple', catSamsung: 'Accessoires Samsung', catGaming: 'Gaming & Consoles',
+                cartTitle: '🛒 Votre Panier', wishTitle: '❤️ Liste de Souhaits',
+                apply: 'Appliquer', toCheckout: 'Passer à la Caisse 💳', close: 'Fermer',
+                stock: '✓ En Stock (Livraison: 1-2 jours)', reviewsHead: 'Avis Clients & Photos 💬',
+                checkoutHead: '📝 Finaliser la Commande', giftOption: '🎁 Emballage cadeau & carte (+ 2,50 €)',
+                buyBtn: 'Commander Maintenant 🚀', sortDef: 'Tri Par Défaut',
+                sortLow: 'Prix: Bas à Élevé', sortHigh: 'Prix: Élevé à Bas'
+            },
+            'es': {
+                title: 'Mohamad Gaming Store',
+                search: 'Buscar productos... 🔍',
+                catAll: 'Todos', catHw: 'Hardware PC', catAcc: 'Accesorios', catApple: 'Accesorios Apple', catSamsung: 'Accesorios Samsung', catGaming: 'Gaming y Consolas',
+                cartTitle: '🛒 Tu Carrito', wishTitle: '❤️ Lista de Deseos',
+                apply: 'Aplicar', toCheckout: 'Proceder al Pago 💳', close: 'Cerrar',
+                stock: '✓ En Stock (Entrega: 1-2 días)', reviewsHead: 'Reseñas de Clientes 💬',
+                checkoutHead: '📝 Completar Pedido', giftOption: '🎁 Envolver como regalo (+ 2,50 €)',
+                buyBtn: 'Ordenar Ahora 🚀', sortDef: 'Orden por Defecto',
+                sortLow: 'Precio: Bajo a Alto', sortHigh: 'Precio: Alto a Bajo'
+            },
+            'it': {
+                title: 'Mohamad Gaming Store',
+                search: 'Cerca prodotti... 🔍',
+                catAll: 'Tutti', catHw: 'Hardware PC', catAcc: 'Accessori', catApple: 'Accessori Apple', catSamsung: 'Accessori Samsung', catGaming: 'Gaming e Console',
+                cartTitle: '🛒 Il tuo Carrello', wishTitle: '❤️ Lista Desideri',
+                apply: 'Applica', toCheckout: 'Procedi al Checkout 💳', close: 'Chiudi',
+                stock: '✓ Disponibile (Consegna: 1-2 giorni)', reviewsHead: 'Recensioni Clienti 💬',
+                checkoutHead: '📝 Completa Ordine', giftOption: '🎁 Confezione regalo (+ 2,50 €)',
+                buyBtn: 'Ordina Ora 🚀', sortDef: 'Ordinamento Predefinito',
+                sortLow: 'Prezzo: Basso - Alto', sortHigh: 'Prezzo: Alto - Basso'
+            },
+            'tr': {
+                title: 'Mohamad Gaming Store',
+                search: 'Ürün ara... 🔍',
+                catAll: 'Tümü', catHw: 'PC Donanım', catAcc: 'Aksesuarlar', catApple: 'Apple Aksesuarları', catSamsung: 'Samsung Aksesuarları', catGaming: 'Oyun ve Konsol',
+                cartTitle: '🛒 Sepetiniz', wishTitle: '❤️ İstek Listesi',
+                apply: 'Uygula', toCheckout: 'Ödemeye Geç 💳', close: 'Kapat',
+                stock: '✓ Stokta (Teslimat: 1-2 iş günü)', reviewsHead: 'Müşteri Yorumları 💬',
+                checkoutHead: '📝 Siparişi Tamamla', giftOption: '🎁 Hediye paketi (+ 2,50 €)',
+                buyBtn: 'Sipariş Ver 🚀', sortDef: 'Varsayılan Sıralama',
+                sortLow: 'Fiyat: Düşükten Yükseğe', sortHigh: 'Fiyat: Yüksekten Düşüğе'
+            },
+            'ru': {
+                title: 'Mohamad Gaming Store',
+                search: 'Поиск товаров... 🔍',
+                catAll: 'Все', catHw: 'ПК Железо', catAcc: 'Аксессуары', catApple: 'Apple Аксессуары', catSamsung: 'Samsung Аксессуары', catGaming: 'Игры и Консоли',
+                cartTitle: '🛒 Ваша Корзина', wishTitle: '❤️ Список желаний',
+                apply: 'Применить', toCheckout: 'Перейти к оформлению 💳', close: 'Закрыть',
+                stock: '✓ В наличии (Доставка: 1-2 дня)', reviewsHead: 'Отзывы клиентов 💬',
+                checkoutHead: '📝 Завершить заказ', giftOption: '🎁 Подарочная упаковка (+ 2,50 €)',
+                buyBtn: 'Заказать сейчас 🚀', sortDef: 'Сортировка по умолчанию',
+                sortLow: 'Цена: по возрастанию', sortHigh: 'Цена: по убыванию'
+            },
+            'zh': {
+                title: 'Mohamad Gaming Store',
+                search: '搜索产品... 🔍',
+                catAll: '全部', catHw: 'PC 硬件', catAcc: '配件', catApple: 'Apple 配件', catSamsung: 'Samsung 配件', catGaming: '游戏与主机',
+                cartTitle: '🛒 您的购物车', wishTitle: '❤️ 愿望清单',
+                apply: '应用', toCheckout: '前往结账 💳', close: '关闭',
+                stock: '✓ 有货 (配送: 1-2个工作日)', reviewsHead: '客户评价 💬',
+                checkoutHead: '📝 完成订单', giftOption: '🎁 礼品包装 (+ 2.50 €)',
+                buyBtn: '立即订购 🚀', sortDef: '默认排序',
+                sortLow: '价格：从低到高', sortHigh: '价格：从高到低'
+            },
+            'ja': {
+                title: 'Mohamad Gaming Store',
+                search: '商品を検索... 🔍',
+                catAll: 'すべて', catHw: 'PCパーツ', catAcc: 'アクセサリ', catApple: 'Appleアクセサリ', catSamsung: 'Samsungアクセサリ', catGaming: 'ゲーム＆コンソール',
+                cartTitle: '🛒 ショッピングカート', wishTitle: '❤️ ウィッシュリスト',
+                apply: '適用', toCheckout: 'レジに進む 💳', close: '閉じる',
+                stock: '✓ 在庫あり (配送: 1〜2営業日)', reviewsHead: 'カスタマーレビュー 💬',
+                checkoutHead: '📝 注文を完了する', giftOption: '🎁 ギフト包装 (+ 2.50 €)',
+                buyBtn: '今すぐ注文 🚀', sortDef: 'デフォルトの並び替え',
+                sortLow: '価格が安い順', sortHigh: '価格が高い順'
+            },
+            'hi': {
+                title: 'Mohamad Gaming Store',
+                search: 'उत्पाद खोजें... 🔍',
+                catAll: 'सभी', catHw: 'पीसी हार्डवेयर', catAcc: 'सहायक उपकरण', catApple: 'Apple सहायक उपकरण', catSamsung: 'Samsung सहायक उपकरण', catGaming: 'गेमिंग और कंसोल',
+                cartTitle: '🛒 आपकी कार्ट', wishTitle: '❤️ इच्छा सूची',
+                apply: 'लागू करें', toCheckout: 'चेकआउट करें 💳', close: 'बंद करें',
+                stock: '✓ स्टॉक में (डिलीवरी: 1-2 दिन)', reviewsHead: 'ग्राहक समीक्षा 💬',
+                checkoutHead: '📝 ऑर्डर पूरा करें', giftOption: '🎁 उपहार रैップ (+ 2.50 €)',
+                buyBtn: 'अभी ऑर्डर करें 🚀', sortDef: 'डिफ़ॉल्ट छँटाई',
+                sortLow: 'कीमत: कम से ज्यादा', sortHigh: 'कीमत: ज्यादा से कम'
+            }
+        };
+
+        let currentLang = 'de';
+        let soundEnabled = true;
+        let cashbackBalance = 0;
+        let loyaltyPoints = 0;
+        let storeOrders = [];
+
+        try {
+            const savedOrders = localStorage.getItem('store_orders_list');
+            if (savedOrders) storeOrders = JSON.parse(savedOrders);
+            const savedLoyalty = localStorage.getItem('store_loyalty_points');
+            if (savedLoyalty) loyaltyPoints = parseInt(savedLoyalty) || 0;
+        } catch(e) {}
+
+        function toggleDropdownMenu() {
+            const menu = document.getElementById('dropdownMenuContent');
+            if (menu) menu.classList.toggle('show');
+        }
+
+        window.addEventListener('click', function(e) {
+            if (!e.target.closest('.top-corner-menu-wrapper')) {
+                const menu = document.getElementById('dropdownMenuContent');
+                if (menu && menu.classList.contains('show')) {
+                    menu.classList.remove('show');
+                }
+            }
+        });
+
+        function setThemeColor(colorHex) {
+            document.documentElement.style.setProperty('--primary-color', colorHex);
+            try { localStorage.setItem('store_primary_color', colorHex); } catch(e){}
+            showNotification('Farbschema aktualisiert! 🎨');
+        }
+
+        function setRgbTheme(color) {
+            document.documentElement.style.setProperty('--primary-color', color);
+            showNotification('AI RGB Beleuchtung aktiviert! 🌈');
+        }
+
+        function toggleAiModal() {
+            const overlay = document.getElementById('aiModalOverlay');
+            if (overlay) overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function togglePushModal() {
+            const overlay = document.getElementById('pushModalOverlay');
+            if (overlay) overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function subscribePushAlerts() {
+            const email = document.getElementById('pushEmailInput').value;
+            if (!email) {
+                alert('Bitte gib deine E-Mail Adresse ein!');
+                return;
+            }
+            userXp += 50;
+            updateVipStatus();
+            saveState();
+            togglePushModal();
+            showNotification('Push-Benachrichtigungen erfolgreich aktiviert! +50 XP ⚡');
+        }
+
+        function runAiSearchAssistant() {
+            const query = document.getElementById('aiQueryInput').value.toLowerCase();
+            const resArea = document.getElementById('aiResultArea');
+            if (!resArea) return;
+            if (!query) {
+                alert('Bitte gib einen Suchbegriff ein!');
+                return;
+            }
+            
+            const found = products.filter(p => p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query));
+            resArea.style.display = 'block';
+            if (found.length > 0) {
+                let html = `<b>🤖 KI-Empfehlung für "${query}":</b><br>`;
+                found.forEach(p => {
+                    html += `• ${p.name} (${formatPrice(p.price)}) - <button style="background:none; border:none; color:var(--primary-color); cursor:pointer; font-weight:bold;" onclick="addToCart('${p.name}', ${p.price}); toggleAiModal();">Hinzufügen 🛒</button><br>`;
+                });
+                resArea.innerHTML = html;
+            } else {
+                resArea.innerHTML = `🤖 Keine exakten Treffer gefunden, aber Mohamad empfiehlt dir unseren Bestseller: <b>Prozessor (CPU)</b> für 350 €!`;
+            }
+        }
+
+        function closeWelcomeModal() {
+            const modal = document.getElementById('welcomeModalOverlay');
+            if (modal) modal.style.display = 'none';
+            setTimeout(() => {
+                togglePushModal();
+            }, 3000);
+        }
+
+        // Feature 1: Abandoned Cart Recovery (Exit Intent with 5% Discount)
+        let exitIntentShown = false;
+        document.addEventListener('mouseleave', e => {
+            if (e.clientY <= 0 && !exitIntentShown && Object.keys(cart).length > 0) {
+                exitIntentShown = true;
+                const exitModal = document.getElementById('exitModalOverlay');
+                if (exitModal) exitModal.style.display = 'flex';
+            }
+        });
+
+        function closeExitModal() {
+            const exitModal = document.getElementById('exitModalOverlay');
+            if (exitModal) exitModal.style.display = 'none';
+            discountRate = 0.05; // 5% extra discount for recovered cart
+            showNotification('Warenkorb-Rabatt von 5% aktiviert! 🎉');
+            updateCartModal();
+        }
+
+        function installPwaApp() {
+            alert('📱 Um Mohamad Store als App auf deinem Smartphone/Tablet zu installieren:\n\n• Safari (iPhone): Klicke auf "Teilen" ➔ "Zum Home-Bildschirm"\n• Chrome (Android): Klicke auf die 3 Punkte ➔ "App installieren" oder "Zum Startbildschirm"');
+        }
+
+        function playClickSound() {
+            if (!soundEnabled) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                osc.frequency.setValueAtTime(880, ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.2);
+            } catch(e) {}
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const soundBtn = document.getElementById('soundBtn');
+            if (soundBtn) soundBtn.innerText = soundEnabled ? '🔊 Audio' : '🔇 Audio';
+        }
+        
+        function changeLanguage() {
+            currentLang = document.getElementById('langSelect').value;
+            const t = translations[currentLang] || translations['de'];
+
+            document.getElementById('txtStoreTitle').innerText = t.title;
+            document.getElementById('searchInput').placeholder = t.search;
+            document.getElementById('btnCatHw').innerText = t.catHw;
+            document.getElementById('btnCatAcc').innerText = t.catAcc;
+            document.getElementById('btnCatApple').innerText = t.catApple;
+            document.getElementById('btnCatSamsung').innerText = t.catSamsung;
+            document.getElementById('btnCatGaming').innerText = t.catGaming;
+            document.getElementById('txtCartTitle').innerText = t.cartTitle;
+            document.getElementById('txtWishTitle').innerText = t.wishTitle;
+            document.getElementById('txtApply').innerText = t.apply;
+            document.getElementById('txtToCheckout').innerText = t.toCheckout;
+            document.getElementById('txtCloseCart').innerText = t.close;
+            document.getElementById('txtCloseWish').innerText = t.close;
+            document.getElementById('txtStock').innerText = t.stock;
+            document.getElementById('txtReviewsHead').innerText = t.reviewsHead;
+            document.getElementById('txtCheckoutHead').innerText = t.checkoutHead;
+            document.getElementById('txtGiftOption').innerText = t.giftOption;
+            document.getElementById('txtBuyBtn').innerText = t.buyBtn;
+            document.getElementById('optSortDef').innerText = t.sortDef;
+            document.getElementById('optSortLow').innerText = t.sortLow;
+            document.getElementById('optSortHigh').innerText = t.sortHigh;
+
+            document.body.dir = (currentLang === 'ar') ? 'rtl' : 'ltr';
+        }
+
+        const currencies = {
+            'EUR': { symbol: '€', rate: 1.0 },
+            'USD': { symbol: '$', rate: 1.08 },
+            'GBP': { symbol: '£', rate: 0.85 },
+            'SAR': { symbol: 'ر.س', rate: 4.05 },
+            'AED': { symbol: 'د.إ', rate: 3.96 },
+            'EGP': { symbol: 'ج.م', rate: 52.0 },
+            'TRY': { symbol: '₺', rate: 35.5 },
+            'JPY': { symbol: '¥', rate: 162.0 },
+            'CNY': { symbol: '¥', rate: 7.85 },
+            'INR': { symbol: '₹', rate: 90.5 },
+            'CAD': { symbol: '$', rate: 1.48 },
+            'AUD': { symbol: '$', rate: 1.65 },
+            'CHF': { symbol: 'CHF', rate: 0.96 }
+        };
+
+        let currentCurrency = 'EUR';
+
+        const defaultProducts = [
+            { id: 1, name: 'Prozessor (CPU)', price: 350, stock: 3, img: 'CPU.jpg', category: 'hardware', rating: '4.9', stars: '★★★★★', badge: 'Bestseller ⭐', badgeClass: 'badge-bestseller', desc: 'Leistungsstarker Mehrkern-Prozessor direkt von Mohamad zum Tiefpreis.', reviews: [{text: 'Super schnelle CPU! Bei Fragen: mohameddayeh44@gmail.com', photo: ''}] },
+            { id: 2, name: 'Motherboard', price: 220, stock: 4, img: 'Moterboard.jpg', category: 'hardware', rating: '4.7', stars: '★★★★☆', badge: '', desc: 'Oberklasse-Mainboard mit PCIe 5.0, WiFi 6E direkt aus Mohamad Store.', reviews: [] },
+            { id: 3, name: 'Grafikkarte (GPU)', price: 480, stock: 2, img: 'gpu.jpg', category: 'hardware', rating: '4.8', stars: '★★★★★', badge: 'HOT 🔥', badgeClass: 'badge-hot', desc: 'Grafikkarte für flüssiges 1440p Gaming zum besten Marktpreis.', reviews: [] },
+            { id: 4, name: 'NVIDIA RTX 3090 Ti', price: 1200, stock: 1, img: 'rtx3090ti.webp', category: 'hardware', rating: '5.0', stars: '★★★★★', badge: 'Bestseller ⭐', badgeClass: 'badge-bestseller', desc: 'Extreme 4K Ultra-Gaming Performance mit 24 GB VRAM direkt vom Händler.', reviews: [] },
+            { id: 5, name: 'Hochgeschwindigkeits-RAM', price: 110, stock: 6, img: 'Ram.webp', category: 'hardware', rating: '4.6', stars: '★★★★☆', badge: '', desc: '32 GB DDR5 RAM mit RGB-Beleuchtung zum Sonderpreis.', reviews: [] },
+            { id: 6, name: 'SSD Speicher', price: 90, stock: 5, img: 'ssd.webp', category: 'hardware', rating: '4.9', stars: '★★★★★', badge: 'Neu ✨', badgeClass: 'badge-new', desc: '1 TB NVMe M.2 SSD mit Lesegeschwindigkeiten von 7000 MB/s.', reviews: [] },
+            { id: 7, name: 'Netzteil (Power Supply)', price: 130, stock: 4, img: 'psu.webp', category: 'hardware', rating: '4.7', stars: '★★★★☆', badge: '', desc: '850W 80 Plus Gold vollmodulares Netzteil.', reviews: [] },
+            { id: 8, name: 'CPU-Kühler', price: 75, stock: 7, img: 'cooler.png', category: 'hardware', rating: '4.5', stars: '★★★★☆', badge: '', desc: '240mm AIO Wasserkühlung für kühle CPU-Temperaturen.', reviews: [] },
+            { id: 9, name: 'PC Gehäuse', price: 150, stock: 3, img: 'case.jpg', category: 'hardware', rating: '4.8', stars: '★★★★★', badge: '', desc: 'Gaming-Gehäuse aus gehärtetem Glas mit optimalem Airflow.', reviews: [] },
+            { id: 10, name: 'RGB Lüfter Set', price: 65, stock: 8, img: 'Fans.webp', category: 'hardware', rating: '4.4', stars: '★★★★☆', badge: '', desc: '3er-Pack 120mm RGB Lüfter inklusive Steuerungs-Hub.', reviews: [] },
+            { id: 11, name: 'Gaming Tastatur', price: 85, stock: 4, img: 'Keyboard.webp', category: 'peripherie', rating: '4.9', stars: '★★★★★', badge: 'Neu ✨', badgeClass: 'badge-new', desc: 'Mechanische Tastatur mit Custom Switches und RGB Beleuchtung.', reviews: [] },
+            { id: 12, name: 'Gaming Maus', price: 55, stock: 5, img: 'Mouse.webp', category: 'peripherie', rating: '4.8', stars: '★★★★★', badge: '', desc: 'Ultraleichte Gaming-Maus mit 26.000 DPI Sensor.', reviews: [] },
+            { id: 13, name: 'Beyerdynamic DT 990 Pro', price: 140, stock: 2, img: 'DT990.jpg', category: 'peripherie', rating: '5.0', stars: '★★★★★', badge: 'Bestseller ⭐', badgeClass: 'badge-bestseller', desc: 'Offener Studio-Kopfhörer für detailreichen Gaming-Sound zum Tiefpreis.', reviews: [] },
+            { id: 14, name: 'Sony Kamera', price: 650, stock: 2, img: 'sony.webp', category: 'peripherie', rating: '4.7', stars: '★★★★☆', badge: '', desc: 'Systemkamera ideal für hochauflösendes 4K Streaming & Vlogging.', reviews: [] },
+            { id: 15, name: 'PlayStation 5 Setup', price: 550, stock: 3, img: 'ps5gamin.jpg', category: 'gaming', rating: '4.9', stars: '★★★★★', badge: 'HOT 🔥', badgeClass: 'badge-hot', desc: 'Konsole der nächsten Generation mit ultraschneller SSD.', reviews: [] },
+            { id: 16, name: 'PS5 Controller', price: 70, stock: 6, img: 'controllerps5.webp', category: 'gaming', rating: '4.7', stars: '★★★★☆', badge: '', desc: 'Wireless Controller mit haptischem Feedback.', reviews: [] },
+            { id: 17, name: 'Samsung Odyssey G9 Monitor', price: 1100, stock: 2, img: 'Odysseyg9.webp', category: 'gaming', rating: '4.9', stars: '★★★★★', badge: 'Bestseller ⭐', badgeClass: 'badge-bestseller', desc: '49 Zoll Curved Gaming Monitor mit 240Hz zum Bestpreis.', reviews: [] },
+            { id: 18, name: 'Iphone 17', price: 700, stock: 4, img: 'iphone17.jpg', category: 'apple', rating: '5.0', stars: '★★★★★', badge: 'Neu ✨', badgeClass: 'badge-new', desc: 'iphone17 Sehr gut', reviews: [] }
+        ];
+
+        let flashSaleProducts = [
+            { name: 'NVIDIA RTX 3090 Ti (Flash)', price: 999, oldPrice: 1200, img: 'rtx3090ti.webp' },
+            { name: 'PlayStation 5 Setup (Flash)', price: 479, oldPrice: 550, img: 'ps5gamin.jpg' }
+        ];
+
+        let products = defaultProducts;
+        let cart = {};
+        let wishlist = [];
+        let compareList = [];
+        let userXp = 0;
+        let currentCategory = 'all';
+        let discountRate = 0;
+        let activeProductForReview = null;
+
+        try {
+            const savedProducts = localStorage.getItem('store_custom_products');
+            if (savedProducts) products = JSON.parse(savedProducts);
+            
+            const savedCart = localStorage.getItem('store_cart');
+            if (savedCart) cart = JSON.parse(savedCart);
+            
+            const savedWish = localStorage.getItem('store_wishlist');
+            if (savedWish) wishlist = JSON.parse(savedWish);
+            
+            const savedCompare = localStorage.getItem('store_compare');
+            if (savedCompare) compareList = JSON.parse(savedCompare);
+
+            const savedXp = localStorage.getItem('store_xp');
+            if (savedXp) userXp = parseInt(savedXp) || 0;
+
+            const savedCashback = localStorage.getItem('store_cashback');
+            if (savedCashback) cashbackBalance = parseFloat(savedCashback) || 0;
+        } catch (e) {}
+
+        function formatPrice(amountInEUR) {
+            const curr = currencies[currentCurrency] || currencies['EUR'];
+            const converted = Math.round(amountInEUR * curr.rate);
+            return `${converted} ${curr.symbol}`;
+        }
+
+        function changeCurrency() {
+            currentCurrency = document.getElementById('currencySelect').value;
+            renderProducts(products);
+            renderFlashSale();
+            updateCart();
+        }
+
+        function updateVipStatus() {
+            const xpEl = document.getElementById('xpPoints');
+            const rankEl = document.getElementById('rankTitle');
+            const cbEl = document.getElementById('cashbackBalance');
+            const lpHeader = document.getElementById('loyaltyPointsHeader');
+            const lpCart = document.getElementById('loyaltyPointsDisplay');
+
+            if (xpEl) xpEl.innerText = userXp;
+            if (cbEl) cbEl.innerText = cashbackBalance.toFixed(2);
+            if (lpHeader) lpHeader.innerText = loyaltyPoints;
+            if (lpCart) lpCart.innerText = loyaltyPoints;
+
+            if (rankEl) {
+                let rank = 'Gamer Bronze 🥉';
+                if (userXp >= 1000) rank = 'Gamer God 👑';
+                else if (userXp >= 500) rank = 'Gamer Gold 🥇';
+                else if (userXp >= 200) rank = 'Gamer Silver 🥈';
+                rankEl.innerText = rank;
+            }
+        }
+
+        function redeemLoyaltyPoints() {
+            if (loyaltyPoints < 50) {
+                alert('Du benötigst mindestens 50 Treuepunkte, um einen Rabatt einzulösen!');
+                return;
+            }
+            loyaltyPoints -= 50;
+            discountRate = 0.10;
+            const info = document.getElementById('discountInfo');
+            if (info) {
+                info.innerText = '50 Treuepunkte eingelöst! 10% Rabatt aktiv 🎉';
+                info.style.display = 'block';
+            }
+            saveState();
+            updateVipStatus();
+            updateCartModal();
+            showNotification('Treuepunkte erfolgreich eingelöst! ⭐');
+        }
+
+        function toggleTrackerModal() {
+            const overlay = document.getElementById('trackerModalOverlay');
+            if (overlay) overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function trackOrder() {
+            const idInput = document.getElementById('trackerId');
+            const resEl = document.getElementById('trackerResult');
+            if (!idInput || !idInput.value) {
+                alert('Bitte Bestellnummer eingeben!');
+                return;
+            }
+            const statuses = [
+                '📦 Status: Bestellung wird von Mohamad verpackt!',
+                '🚚 Status: Paket an DHL übergeben (Wird zugestellt)!',
+                '⚡ Status: Erwartete Lieferung morgen bis 14:00 Uhr.'
+            ];
+            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+            if (resEl) resEl.innerText = randomStatus;
+        }
+
+        function toggleAlertModal() {
+            const overlay = document.getElementById('alertModalOverlay');
+            if (overlay) overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function submitAlert() {
+            const emailInput = document.getElementById('alertEmail');
+            if (!emailInput || !emailInput.value) {
+                alert('Bitte gib eine gültige E-Mail ein!');
+                return;
+            }
+            toggleAlertModal();
+            showNotification('Benachrichtigung aktiviert! 🔔');
+            emailInput.value = '';
+        }
+
+        function toggleCompare(productName) {
+            if (compareList.includes(productName)) {
+                compareList = compareList.filter(n => n !== productName);
+                showNotification(productName + ' aus Vergleich entfernt');
+            } else {
+                if (compareList.length >= 3) {
+                    alert('Du kannst maximal 3 Produkte gleichzeitig vergleichen!');
+                    return;
+                }
+                compareList.push(productName);
+                showNotification(productName + ' zum Vergleich hinzugefügt 📊');
+            }
+            try { localStorage.setItem('store_compare', JSON.stringify(compareList)); } catch(e){}
+            document.getElementById('compareCount').innerText = compareList.length;
+            renderProducts(products);
+        }
+
+        function openCompareModal() {
+            const content = document.getElementById('compareContent');
+            if (!content) return;
+            if (compareList.length === 0) {
+                content.innerHTML = '<p style="text-align:center; color:#888;">Keine Produkte zum Vergleichen ausgewählt.</p>';
+            } else {
+                let html = '<table style="width:100%; border-collapse:collapse; font-size:13px; text-align:left;">';
+                html += '<tr style="border-bottom:2px solid #ddd;"><th style="padding:8px;">Merkmal</th>';
+                compareList.forEach(name => {
+                    const p = products.find(item => item.name === name);
+                    if (p) html += `<th style="padding:8px; text-align:center;"><img src="${p.img}" style="width:50px; height:50px; object-fit:contain; display:block; margin:0 auto;"><br>${p.name}</th>`;
+                });
+                html += '</tr>';
+
+                html += '<tr style="border-bottom:1px solid #eee;"><td style="padding:8px; font-weight:bold;">Preis</td>';
+                compareList.forEach(name => {
+                    const p = products.find(item => item.name === name);
+                    if (p) html += `<td style="padding:8px; text-align:center; font-weight:bold; color:var(--primary-color);">${formatPrice(p.price)}</td>`;
+                });
+                html += '</tr>';
+
+                html += '<tr style="border-bottom:1px solid #eee;"><td style="padding:8px; font-weight:bold;">Bewertung</td>';
+                compareList.forEach(name => {
+                    const p = products.find(item => item.name === name);
+                    if (p) html += `<td style="padding:8px; text-align:center;">${p.stars} (${p.rating})</td>`;
+                });
+                html += '</tr>';
+
+                html += '<tr style="border-bottom:1px solid #eee;"><td style="padding:8px; font-weight:bold;">Beschreibung</td>';
+                compareList.forEach(name => {
+                    const p = products.find(item => item.name === name);
+                    if (p) html += `<td style="padding:8px; text-align:center; font-size:12px; color:#555;">${p.desc}</td>`;
+                });
+                html += '</tr>';
+
+                html += '</table>';
+                content.innerHTML = html;
+            }
+            document.getElementById('compareModalOverlay').style.display = 'flex';
+        }
+
+        function toggleCompareModal() {
+            const overlay = document.getElementById('compareModalOverlay');
+            if (overlay) overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function renderFlashSale() {
+            const grid = document.getElementById('flashGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            flashSaleProducts.forEach(f => {
+                const card = document.createElement('div');
+                card.className = 'flash-card';
+                card.innerHTML = `
+                    <span class="flash-badge">⚡ -20%</span>
+                    <img src="${f.img}" onerror="this.onerror=null; this.src='https://via.placeholder.com/150?text=Flash';">
+                    <h4 style="margin:8px 0 4px 0; font-size:14px;">${f.name}</h4>
+                    <p style="margin:0; font-size:13px; color:#ff416c; font-weight:bold;">${formatPrice(f.price)} <span style="text-decoration:line-through; color:#888; font-size:11px;">${formatPrice(f.oldPrice)}</span></p>
+                    <div class="deal-timer">⏳ Mohamad Tiefpreis-Deal!</div>
+                    <div class="stock-urgency">🔥 Nur noch 2 auf Lager!</div>
+                    <button class="cart-btn" style="width:100%; margin-top:5px;" onclick="playClickSound(); addToCart('${f.name}', ${f.price})">Sichern ⚡</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderProducts(itemsToRender) {
+            const container = document.getElementById('productsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            itemsToRender.forEach(p => {
+                const isWished = wishlist.includes(p.name);
+                const isCompared = compareList.includes(p.name);
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.setAttribute('data-category', p.category);
+                card.setAttribute('data-price', p.price);
+
+                const badgeHtml = p.badge ? `<span class="badge ${p.badgeClass}">${p.badge}</span>` : '';
+                const stockCount = (p.stock !== undefined) ? p.stock : 3;
+
+                let stockHtml = '';
+                let btnHtml = '';
+
+                if (stockCount <= 0) {
+                    stockHtml = `<div class="stock-urgency out-of-stock">❌ Ausverkauft (Out of Stock)</div>`;
+                    btnHtml = `<button class="cart-btn" disabled>Nicht verfügbar</button>`;
+                } else {
+                    stockHtml = `<div class="stock-urgency">🔥 Nur noch ${stockCount} auf Lager! (Begrenzt)</div>`;
+                    btnHtml = `<button class="cart-btn" onclick="playClickSound(); addToCart('${p.name}', ${p.price})">In den Warenkorb 🛒</button>`;
+                }
+
+                card.innerHTML = `
+                    ${badgeHtml}
+                    <span class="heart-icon" onclick="playClickSound(); toggleWishlist('${p.name}')">${isWished ? '❤️' : '🤍'}</span>
+                    <img src="${p.img}" onerror="this.onerror=null; this.src='https://via.placeholder.com/150?text=Product';" onclick="playClickSound(); openDetail('${p.name}')">
+                    <h3>${p.name}</h3>
+                    <div class="stars">${p.stars} <span class="rating-text">(${p.rating})</span></div>
+                    <div class="deal-timer">🔥 Direkter Tiefpreis von Mohamad</div>
+                    ${stockHtml}
+                    <p>Preis: <b>${formatPrice(p.price)}</b></p>
+                    <div class="card-actions-row">
+                        <button class="compare-toggle-btn ${isCompared ? 'active' : ''}" onclick="toggleCompare('${p.name}')">📊 ${isCompared ? 'Vergleiche' : 'Vergleich'}</button>
+                        ${btnHtml}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            document.getElementById('compareCount').innerText = compareList.length;
+        }
+
+        function toggleMysteryModal() {
+            const overlay = document.getElementById('mysteryModalOverlay');
+            if (overlay) overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function openMysteryBox() {
+            const prizes = ['🎉 Glückwunsch! 10% Rabatt (Code: GAMING10)', '🚀 50 Extra XP Punkte erhalten!', '🎁 Kostenloser Versand freigeschaltet!'];
+            const res = prizes[Math.floor(Math.random() * prizes.length)];
+            const resEl = document.getElementById('mysteryResult');
+            if (resEl) resEl.innerText = res;
+            userXp += 50;
+            loyaltyPoints += 20;
+            updateVipStatus();
+            saveState();
+            playClickSound();
+            showNotification('Mystery Box geöffnet! +20 Treuepunkte ⭐');
+        }
+
+        function toggleWheelModal() {
+            const overlay = document.getElementById('wheelModalOverlay');
+            if (overlay) overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function toggleBuilderModal() {
+            const overlay = document.getElementById('builderModalOverlay');
+            if (overlay) overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        // Feature 2: AI Bottleneck & Performance Calculator in PC Builder
+        function calculateBuilderTotal() {
+            const cpuSel = document.getElementById('buildCpu');
+            const gpuSel = document.getElementById('buildGpu');
+            
+            const cpuVal = parseFloat(cpuSel.value) || 0;
+            const gpuVal = parseFloat(gpuSel.value) || 0;
+            const ramVal = parseFloat(document.getElementById('buildRam').value) || 0;
+            const total = cpuVal + gpuVal + ramVal;
+
+            const totalEl = document.getElementById('builderTotal');
+            if (totalEl) totalEl.innerText = 'Gesamt: ' + formatPrice(total);
+
+            const analysisEl = document.getElementById('builderAnalysis');
+            if (analysisEl) {
+                if (cpuVal === 0 && gpuVal === 0) {
+                    analysisEl.innerHTML = '<b>🔍 AI Bottleneck & Performance Analyse:</b> Wähle Komponenten aus, um die Leistungsberechnung zu starten.';
+                } else {
+                    let bottleneckMsg = '✅ Perfekte Balance (Kein Flaschenhals)!';
+                    let fpsOutput = '100 - 144 FPS (1440p Gaming)';
+                    let psuRec = '750W Gold zertifiziert';
+
+                    if (cpuVal === 350 && gpuVal === 1200) {
+                        bottleneckMsg = '⚠️ Leichter CPU-Bottleneck bei 4K (Die RTX 3090 Ti ist extrem stark für diesen i5/Ryzen 5)!';
+                        fpsOutput = '140+ FPS (Hohe Performance)';
+                        psuRec = '850W Netzteil';
+                    } else if (gpuVal === 1200 && cpuVal === 550) {
+                        bottleneckMsg = '🚀 High-End Enthusiast Match (0% Bottleneck)!';
+                        fpsOutput = '200+ FPS (4K Ultra Gaming 🎮)';
+                        psuRec = '1000W Netzteil ⚡';
+                    }
+
+                    analysisEl.innerHTML = `<b>🔍 AI Bottleneck & Performance Report:</b><br>` +
+                        `• Kompatibilität: <b>${bottleneckMsg}</b><br>` +
+                        `• Erwartete Leistung: <b>${fpsOutput}</b><br>` +
+                        `• ⚡ Empfohlenes Netzteil (PSU): <b>${psuRec}</b>`;
+                }
+            }
+        }
+
+        function addCustomPcToCart() {
+            const cpu = parseFloat(document.getElementById('buildCpu').value) || 0;
+            const gpu = parseFloat(document.getElementById('buildGpu').value) || 0;
+            const ram = parseFloat(document.getElementById('buildRam').value) || 0;
+            const total = cpu + gpu + ram;
+
+            if (total === 0) {
+                alert('Bitte wähle mindestens eine Komponente aus!');
+                return;
+            }
+
+            addToCart('Custom Gaming PC (Mohamad Edition)', total);
+            toggleBuilderModal();
+            showNotification('Custom PC zum Warenkorb hinzugefügt! 💻');
+        }
+
+        function spinWheel() {
+            const results = ['5% Rabatt! Code: LUCKY5', '10% Rabatt! Code: GAMING10', '15% Rabatt! Code: LUCKY15'];
+            const res = results[Math.floor(Math.random() * results.length)];
+            const resEl = document.getElementById('wheelResult');
+            if (resEl) resEl.innerText = res;
+            playClickSound();
+            showNotification('Glücksrad gedreht! 🎡');
+        }
+
+        function toggleWishlist(productName) {
+            if (wishlist.includes(productName)) {
+                wishlist = wishlist.filter(item => item !== productName);
+                showNotification(productName + ' entfernt! 💔');
+            } else {
+                wishlist.push(productName);
+                showNotification(productName + ' hinzugefügt! ❤️');
+            }
+            saveState();
+            renderProducts(products);
+            filterProducts();
+            updateWishlistModal();
+        }
+
+        function updateWishlistModal() {
+            const wishCountEl = document.getElementById('wishCount');
+            if (wishCountEl) wishCountEl.innerText = wishlist.length;
+            const list = document.getElementById('wishlistItemsList');
+            if (!list) return;
+            list.innerHTML = '';
+
+            if (wishlist.length === 0) {
+                list.innerHTML = '<li style="text-align: center; color: #888;">Wunschliste ist leer.</li>';
+            } else {
+                wishlist.forEach(name => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span><b>${name}</b></span> <button class="delete-btn" onclick="toggleWishlist('${name}')">Entfernen 💔</button>`;
+                    list.appendChild(li);
+                });
+            }
+        }
+
+        function addNewProduct(event) {
+            event.preventDefault();
+            const title = document.getElementById('adminTitle').value;
+            const price = parseFloat(document.getElementById('adminPrice').value);
+            const stock = parseInt(document.getElementById('adminStock').value) || 3;
+            const img = document.getElementById('adminImg').value;
+            const cat = document.getElementById('adminCat').value;
+            const desc = document.getElementById('adminDesc').value;
+
+            const newProd = {
+                id: Date.now(),
+                name: title,
+                price: price,
+                stock: stock,
+                img: img,
+                category: cat,
+                rating: '5.0',
+                stars: '★★★★★',
+                badge: 'Neu ✨',
+                badgeClass: 'badge-new',
+                desc: desc,
+                reviews: []
+            };
+
+            products.push(newProd);
+            try {
+                localStorage.setItem('store_custom_products', JSON.stringify(products));
+            } catch(e) {}
+            
+            renderProducts(products);
+            filterProducts();
+            renderAdminProductsList();
+            closeAdminModal();
+            showNotification('Neues Produkt im Mohamad Store gespeichert! ⚙️');
+            event.target.reset();
+        }
+
+        function deleteStoreProduct(productId) {
+            products = products.filter(p => p.id !== productId);
+            try {
+                localStorage.setItem('store_custom_products', JSON.stringify(products));
+            } catch(e) {}
+            renderProducts(products);
+            filterProducts();
+            renderAdminProductsList();
+            showNotification('Produkt erfolgreich gelöscht! 🗑️');
+        }
+
+        function editProductPrice(productId) {
+            const p = products.find(item => item.id === productId);
+            if (!p) return;
+            const newPriceStr = prompt(`Neuen Preis für "${p.name}" in € eingeben:`, p.price);
+            if (newPriceStr !== null) {
+                const newPrice = parseFloat(newPriceStr);
+                if (!isNaN(newPrice) && newPrice > 0) {
+                    p.price = newPrice;
+                    try { localStorage.setItem('store_custom_products', JSON.stringify(products)); } catch(e) {}
+                    renderProducts(products);
+                    filterProducts();
+                    renderAdminProductsList();
+                    showNotification('Preis erfolgreich aktualisiert! 🏷️');
+                } else {
+                    alert('Ungültiger Preis!');
+                }
+            }
+        }
+
+        function editProductStock(productId) {
+            const p = products.find(item => item.id === productId);
+            if (!p) return;
+            const currentStock = (p.stock !== undefined) ? p.stock : 3;
+            const newStockStr = prompt(`Neuen Lagerbestand für "${p.name}" eingeben:`, currentStock);
+            if (newStockStr !== null) {
+                const newStock = parseInt(newStockStr);
+                if (!isNaN(newStock) && newStock >= 0) {
+                    p.stock = newStock;
+                    try { localStorage.setItem('store_custom_products', JSON.stringify(products)); } catch(e) {}
+                    renderProducts(products);
+                    filterProducts();
+                    renderAdminProductsList();
+                    showNotification('Lagerbestand erfolgreich aktualisiert! 📦');
+                } else {
+                    alert('Ungültige Anzahl!');
+                }
+            }
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem('store_cart', JSON.stringify(cart));
+                localStorage.setItem('store_wishlist', JSON.stringify(wishlist));
+                localStorage.setItem('store_xp', userXp.toString());
+                localStorage.setItem('store_cashback', cashbackBalance.toString());
+                localStorage.setItem('store_loyalty_points', loyaltyPoints.toString());
+                localStorage.setItem('store_orders_list', JSON.stringify(storeOrders));
+                localStorage.setItem('store_custom_products', JSON.stringify(products));
+            } catch(e) {}
+        }
+
+        function addToCart(productName, productPrice) {
+            const p = products.find(item => item.name === productName);
+            if (p && p.stock !== undefined && p.stock <= 0) {
+                alert('Dieses Produkt ist aktuell ausverkauft!');
+                return;
+            }
+
+            if (cart[productName]) {
+                cart[productName].qty++;
+            } else {
+                cart[productName] = { price: productPrice, qty: 1 };
+            }
+            saveState();
+            updateCart();
+            showNotification(productName + ' hinzugefügt! 🛒');
+        }
+
+        function addAiRecommendationToCart() {
+            addToCart('32GB RAM Upgrade Kit', 110);
+        }
+
+        function changeQty(productName, delta) {
+            if (cart[productName]) {
+                cart[productName].qty += delta;
+                if (cart[productName].qty <= 0) delete cart[productName];
+            }
+            saveState();
+            updateCart();
+        }
+
+        function deleteProduct(productName) {
+            delete cart[productName];
+            saveState();
+            updateCart();
+            showNotification(productName + ' entfernt! 🗑️');
+        }
+
+        function applyCoupon() {
+            const input = document.getElementById('couponInput');
+            if (!input) return;
+            const code = input.value.trim().toUpperCase();
+            if (code === 'GAMING10' || code === 'LUCKY15' || code === 'LUCKY5') {
+                discountRate = code === 'LUCKY15' ? 0.15 : (code === 'LUCKY5' ? 0.05 : 0.10);
+                const info = document.getElementById('discountInfo');
+                if (info) info.style.display = 'block';
+                showNotification('Rabatt aktiviert! 🎉');
+            } else {
+                alert('Ungültiger Code!');
+            }
+            updateCartModal();
+        }
+
+        function getTotalCount() {
+            let count = 0;
+            for (let item in cart) count += cart[item].qty;
+            return count;
+        }
+
+        function getTotalPriceEUR() {
+            let total = 0;
+            for (let item in cart) total += cart[item].price * cart[item].qty;
+            return Math.round(total * (1 - discountRate));
+        }
+
+        function updateCart() {
+            const cartCountEl = document.getElementById('cartCount');
+            if (cartCountEl) cartCountEl.innerText = getTotalCount();
+            updateCartModal();
+        }
+
+        function updateCartModal() {
+            const list = document.getElementById('cartItemsList');
+            const totalDiv = document.getElementById('cartTotal');
+            if (!list || !totalDiv) return;
+            list.innerHTML = '';
+
+            const totalEUR = getTotalPriceEUR();
+
+            const threshold = 100;
+            const progress = Math.min((totalEUR / threshold) * 100, 100);
+            const bar = document.getElementById('shippingProgressBar');
+            if (bar) bar.style.width = progress + '%';
+            
+            const progressText = document.getElementById('shippingProgressText');
+            if (progressText) {
+                if (progress >= 100) {
+                    progressText.innerText = '🎉 Du hast KOSTENLOSEN Versand bei Mohamad freigeschaltet!';
+                    progressText.style.color = '#28a745';
+                } else {
+                    const diff = threshold - totalEUR;
+                    progressText.innerText = `Noch ${formatPrice(diff)} für KOSTENLOSEN Versand!`;
+                    progressText.style.color = 'var(--primary-color)';
+                }
+            }
+
+            if (Object.keys(cart).length === 0) {
+                list.innerHTML = '<li style="text-align: center; color: #888;">Warenkorb ist leer.</li>';
+            } else {
+                for (let productName in cart) {
+                    const item = cart[productName];
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span><b>${productName}</b><br>${formatPrice(item.price)}</span>
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="changeQty('${productName}', -1)">-</button>
+                            <span>${item.qty}</span>
+                            <button class="qty-btn" onclick="changeQty('${productName}', 1)">+</button>
+                            <button class="delete-btn" onclick="deleteProduct('${productName}')">🗑️</button>
+                        </div>
+                    `;
+                    list.appendChild(li);
+                }
+            }
+            totalDiv.innerText = 'Gesamt: ' + formatPrice(totalEUR);
+            updateVipStatus();
+        }
+
+        function expressCheckoutOneClick() {
+            if (Object.keys(cart).length === 0) {
+                alert('Dein Warenkorb ist leer!');
+                return;
+            }
+            toggleCartModal();
+            const orderId = Math.floor(1000 + Math.random() * 9000);
+            let orderItemsArray = [];
+            let totalSpentEUR = 0;
+            for (let name in cart) {
+                const item = cart[name];
+                totalSpentEUR += item.price * item.qty;
+                orderItemsArray.push(`${item.qty}x ${name}`);
+            }
+
+            storeOrders.push({
+                id: orderId,
+                name: 'Express Stammkunde',
+                address: 'Standard-Express-Adresse (1-Click)',
+                shipping: 'DHL Express 24h',
+                pay: 'PayPal Express',
+                items: orderItemsArray
+            });
+
+            cashbackBalance += totalSpentEUR * 0.05;
+            loyaltyPoints += Math.floor(totalSpentEUR * 2);
+            userXp += 100;
+            updateVipStatus();
+            playClickSound();
+
+            cart = {};
+            discountRate = 0;
+            saveState();
+            renderProducts(products);
+            updateCart();
+            showNotification(`⚡ 1-Click Express Bestellung #${orderId} erfolgreich abgeschlossen! 🚀`);
+        }
+
+        function sendCartToWhatsApp() {
+            if (Object.keys(cart).length === 0) {
+                alert('Dein Warenkorb ist leer!');
+                return;
+            }
+            let text = '🛒 *Neue Bestellung von Mohamad Gaming Store:*\n\n';
+            for (let name in cart) {
+                const item = cart[name];
+                text += `• ${item.qty}x ${name} (${formatPrice(item.price * item.qty)})\n`;
+            }
+            text += `\n*Gesamtbetrag:* ${formatPrice(getTotalPriceEUR())}\n\nBitte um Bearbeitung meiner Bestellung! 🚀`;
+            const encoded = encodeURIComponent(text);
+            const whatsappUrl = `https://wa.me/?text=${encoded}`;
+            document.getElementById('whatsappCartBtn').href = whatsappUrl;
+        }
+
+        function sortProducts() {
+            const mode = document.getElementById('sortSelect').value;
+            if (mode === 'low-high') products.sort((a, b) => a.price - b.price);
+            else if (mode === 'high-low') products.sort((a, b) => b.price - a.price);
+            renderProducts(products);
+            filterProducts();
+        }
+
+        function toggleCartModal() {
+            const overlay = document.getElementById('cartModalOverlay');
+            if (overlay) overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function toggleWishlistModal() {
+            const overlay = document.getElementById('wishlistModalOverlay');
+            if (overlay) overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function toggleChatModal() {
+            const overlay = document.getElementById('chatModalOverlay');
+            if (overlay) overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function toggleAdminModal() {
+            const modal = document.getElementById('adminModalOverlay');
+            if (!modal) return;
+            const password = prompt("Bitte Admin-Passwort eingeben:");
+            if (password === "M3a@Admin#2026") {
+                modal.style.display = 'flex';
+                renderAdminOrders();
+                renderAdminProductsList();
+                alert("Erfolgreich eingeloggt! Willkommen Admin.");
+            } else if (password !== null) {
+                alert("Falsches Passwort!");
+            }
+        }
+
+        function closeAdminModal() {
+            const modal = document.getElementById('adminModalOverlay');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function renderAdminProductsList() {
+            const container = document.getElementById('adminProductsListContainer');
+            if (!container) return;
+            if (products.length === 0) {
+                container.innerHTML = '<p style="color:#888; text-align:center; margin:5px 0;">Keine Produkte vorhanden.</p>';
+                return;
+            }
+
+            let html = '<ul style="list-style:none; padding:0; margin:0;">';
+            products.forEach(p => {
+                const stockVal = (p.stock !== undefined) ? p.stock : 3;
+                html += `<li style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid #eee;">`;
+                html += `<span><b>${p.name}</b> (${p.price} € | Lager: ${stockVal})</span>`;
+                html += `<div style="display:flex; gap:4px;">`;
+                html += `<button class="edit-btn" onclick="editProductPrice(${p.id})">Preis ✏️</button>`;
+                html += `<button class="stock-edit-btn" onclick="editProductStock(${p.id})">Lager 📦</button>`;
+                html += `<button class="delete-btn" onclick="deleteStoreProduct(${p.id})">Löschen 🗑️</button>`;
+                html += `</div></li>`;
+            });
+            html += '</ul>';
+            container.innerHTML = html;
+        }
+
+        function renderAdminOrders() {
+            const container = document.getElementById('adminOrdersContainer');
+            if (!container) return;
+            if (storeOrders.length === 0) {
+                container.innerHTML = '<p style="color:#888; text-align:center; margin:10px 0;">Noch keine Bestellungen eingegangen.</p>';
+                return;
+            }
+
+            let html = '';
+            storeOrders.forEach((order, index) => {
+                html += `<div style="border-bottom:1px solid #ccc; padding:8px 0; margin-bottom:8px;">`;
+                html += `<b>#${order.id} - ${order.name}</b> (${order.address})<br>`;
+                html += `<span style="color:#555; font-size:11px;">Zahlung: ${order.pay} | Versand: ${order.shipping}</span><br>`;
+                html += `<ul style="margin:4px 0 4px 15px; padding:0;">`;
+                order.items.forEach((item, itemIdx) => {
+                    const checkedKey = `order_${index}_item_${itemIdx}`;
+                    const isChecked = localStorage.getItem(checkedKey) === 'true';
+                    html += `<li><label><input type="checkbox" ${isChecked ? 'checked' : ''} onclick="toggleChecklistItem('${checkedKey}')"> ${item}</label></li>`;
+                });
+                html += `</ul></div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function toggleChecklistItem(key) {
+            const current = localStorage.getItem(key) === 'true';
+            localStorage.setItem(key, (!current).toString());
+            showNotification('Checkliste aktualisiert! ✓');
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            if (!input) return;
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const box = document.getElementById('chatBox');
+            if (!box) return;
+            
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-msg user';
+            userMsg.innerText = msg;
+            box.appendChild(userMsg);
+            input.value = '';
+
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'chat-msg bot';
+                
+                const lower = msg.toLowerCase();
+                if (lower.includes('versand') || lower.includes('شحن') || lower.includes('shipping')) {
+                    botMsg.innerText = '🚚 Mohamad versendet per DHL & Hermes (1-2 Werktage). Bei Problemen: mohameddayeh44@gmail.com';
+                } else if (lower.includes('preis') || lower.includes('رخص') || lower.includes('günstig')) {
+                    botMsg.innerText = '💡 Alle Artikel werden direkt ohne Zwischenhändler verkauft. Kontaktiere Mohamad direkt unter mohameddayeh44@gmail.com für Spezialwünsche!';
+                } else {
+                    botMsg.innerText = 'Vielen Dank! Bei dringenden Fragen schreibe direkt an Mohamad: mohameddayeh44@gmail.com 🎮';
+                }
+
+                box.appendChild(botMsg);
+                box.scrollTop = box.scrollHeight;
+            }, 800);
+
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function openDetail(name) {
+            const p = products.find(item => item.name === name);
+            if (!p) return;
+            activeProductForReview = p;
+
+            document.getElementById('detailTitle').innerText = p.name;
+            const imgEl = document.getElementById('detailImg');
+            if (imgEl) {
+                imgEl.src = p.img;
+                imgEl.onerror = function() { this.src='https://via.placeholder.com/150?text=Product'; };
+            }
+            document.getElementById('detailDesc').innerText = p.desc;
+            document.getElementById('detailStars').innerText = p.stars + ' (' + p.rating + ')';
+            document.getElementById('detailPrice').innerText = formatPrice(p.price);
+            
+            renderReviews(p);
+
+            const addBtn = document.getElementById('detailAddBtn');
+            if (addBtn) {
+                if (p.stock !== undefined && p.stock <= 0) {
+                    addBtn.innerText = 'Nicht verfügbar';
+                    addBtn.disabled = true;
+                } else {
+                    addBtn.innerText = 'In den Warenkorb 🛒';
+                    addBtn.disabled = false;
+                    addBtn.onclick = function() {
+                        addToCart(p.name, p.price);
+                        closeDetailModal();
+                    };
+                }
+            }
+            const detailOverlay = document.getElementById('detailModalOverlay');
+            if (detailOverlay) detailOverlay.style.display = 'flex';
+        }
+
+        function renderReviews(p) {
+            const revCont = document.getElementById('reviewsContainer');
+            if (!revCont) return;
+            revCont.innerHTML = '';
+            if (!p.reviews || p.reviews.length === 0) {
+                revCont.innerHTML = '<div style="font-size:12px; color:#888;">Noch keine Kommentare.</div>';
+            } else {
+                p.reviews.forEach(r => {
+                    const div = document.createElement('div');
+                    div.className = 'review-item';
+                    let photoHtml = r.photo ? `<br><img src="${r.photo}" style="max-width:100px; max-height:100px; margin-top:6px; border-radius:6px; object-fit:cover;" onerror="this.style.display='none'"` : '';
+                    div.innerHTML = `💬 <b>${r.author || 'Gamer'}:</b> ${r.text || r}${photoHtml}`;
+                    revCont.appendChild(div);
+                });
+            }
+        }
+
+        function addLiveReviewWithPhoto() {
+            const input = document.getElementById('newReviewText');
+            const fileInput = document.getElementById('newReviewFile');
+            if (!input) return;
+            const val = input.value.trim();
+
+            if (!val && (!fileInput || fileInput.files.length === 0)) {
+                alert('Bitte schreibe einen Kommentar oder wähle ein Foto aus!');
+                return;
+            }
+
+            let photoUrl = '';
+            if (fileInput && fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    photoUrl = e.target.result;
+                    saveReviewData(val, photoUrl);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                saveReviewData(val, '');
+            }
+        }
+
+        function saveReviewData(textVal, photoUrl) {
+            if (activeProductForReview) {
+                if (!activeProductForReview.reviews) activeProductForReview.reviews = [];
+                activeProductForReview.reviews.push({ author: 'Gamer (Verified)', text: textVal, photo: photoUrl });
+                try {
+                    localStorage.setItem('store_custom_products', JSON.stringify(products));
+                } catch(e) {}
+                renderReviews(activeProductForReview);
+                const input = document.getElementById('newReviewText');
+                const fileInput = document.getElementById('newReviewFile');
+                if (input) input.value = '';
+                if (fileInput) fileInput.value = '';
+                showNotification('Bewertung & Foto erfolgreich hinzugefügt! 📸⭐');
+            }
+        }
+
+        function closeDetailModal() {
+            const overlay = document.getElementById('detailModalOverlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        function openCheckoutModal() {
+            if (Object.keys(cart).length === 0) {
+                alert('Dein Warenkorb ist leer!');
+                return;
+            }
+            toggleCartModal();
+            updateCheckoutTotal();
+            const checkoutOverlay = document.getElementById('checkoutModalOverlay');
+            if (checkoutOverlay) checkoutOverlay.style.display = 'flex';
+        }
+
+        function updateCheckoutTotal() {
+            const shippingSelect = document.getElementById('shippingMethod');
+            const giftCheckbox = document.getElementById('giftWrap');
+            if (!shippingSelect) return;
+            const shippingCost = parseFloat(shippingSelect.value) || 0;
+            const giftExtra = (giftCheckbox && giftCheckbox.checked) ? 2.50 : 0;
+            const totalWithShipping = getTotalPriceEUR() + shippingCost + giftExtra;
+            const totalEl = document.getElementById('checkoutTotal');
+            if (totalEl) totalEl.innerText = 'Gesamtbetrag: ' + formatPrice(totalWithShipping);
+        }
+
+        function closeCheckoutModal() {
+            const checkoutOverlay = document.getElementById('checkoutModalOverlay');
+            if (checkoutOverlay) checkoutOverlay.style.display = 'none';
+            toggleCartModal();
+        }
+
+        function completeOrder(event) {
+            event.preventDefault();
+
+            for (let productName in cart) {
+                const cartQty = cart[productName].qty;
+                const prod = products.find(item => item.name === productName);
+                if (prod && prod.stock !== undefined) {
+                    prod.stock = Math.max(0, prod.stock - cartQty);
+                }
+            }
+
+            const shippingSelect = document.getElementById('shippingMethod');
+            const nameInput = document.getElementById('custName');
+            const addressInput = document.getElementById('custAddress');
+            const paySelect = document.getElementById('custPay');
+            const giftCheckbox = document.getElementById('giftWrap');
+
+            const shippingText = shippingSelect ? shippingSelect.options[shippingSelect.selectedIndex].text : '';
+            const shippingCost = shippingSelect ? parseFloat(shippingSelect.value) || 0 : 0;
+            const isGift = giftCheckbox ? giftCheckbox.checked : false;
+            const giftExtra = isGift ? 2.50 : 0;
+
+            const orderId = Math.floor(1000 + Math.random() * 9000);
+            
+            let orderItemsArray = [];
+            let totalSpentEUR = 0;
+            for (let name in cart) {
+                const item = cart[name];
+                totalSpentEUR += item.price * item.qty;
+                orderItemsArray.push(`${item.qty}x ${name}`);
+            }
+
+            storeOrders.push({
+                id: orderId,
+                name: nameInput ? nameInput.value : 'Kunde',
+                address: addressInput ? addressInput.value : 'Adresse',
+                shipping: shippingText,
+                pay: paySelect ? paySelect.value : 'PayPal',
+                items: orderItemsArray
+            });
+
+            const invNum = document.getElementById('invNum');
+            const invName = document.getElementById('invName');
+            const invAddr = document.getElementById('invAddr');
+            const invShipping = document.getElementById('invShipping');
+            const invPay = document.getElementById('invPay');
+            const invGift = document.getElementById('invGift');
+
+            if (invNum) invNum.innerText = orderId;
+            if (invName && nameInput) invName.innerText = nameInput.value;
+            if (invAddr && addressInput) invAddr.innerText = addressInput.value;
+            if (invShipping) invShipping.innerText = shippingText;
+            if (invPay && paySelect) invPay.innerText = paySelect.value;
+            if (invGift) invGift.innerText = isGift ? 'Ja (+ 2,50 € Geschenkverpackung)' : 'Nein';
+
+            const invItemsList = document.getElementById('invItems');
+            if (invItemsList) {
+                invItemsList.innerHTML = '';
+                for (let name in cart) {
+                    const item = cart[name];
+                    const li = document.createElement('li');
+                    li.innerText = `${item.qty}x ${name} - ${formatPrice(item.price * item.qty)}`;
+                    invItemsList.appendChild(li);
+                }
+            }
+
+            const earnedCashback = totalSpentEUR * 0.05;
+            cashbackBalance += earnedCashback;
+            const earnedLoyalty = Math.floor(totalSpentEUR * 2);
+            loyaltyPoints += earnedLoyalty;
+
+            const totalFinal = getTotalPriceEUR() + shippingCost + giftExtra;
+            const invTotal = document.getElementById('invTotal');
+            if (invTotal) invTotal.innerText = 'Gesamtbetrag: ' + formatPrice(totalFinal);
+
+            userXp += 50;
+            updateVipStatus();
+            playClickSound();
+
+            const checkoutOverlay = document.getElementById('checkoutModalOverlay');
+            const invoiceOverlay = document.getElementById('invoiceModalOverlay');
+            if (checkoutOverlay) checkoutOverlay.style.display = 'none';
+            if (invoiceOverlay) invoiceOverlay.style.display = 'flex';
+
+            cart = {};
+            discountRate = 0;
+            saveState();
+            renderProducts(products);
+            updateCart();
+            showNotification(`Bestellung #${orderId} erfolgreich! +${earnedLoyalty} Treuepunkte ⭐`);
+        }
+
+        function closeInvoiceModal() {
+            const invoiceOverlay = document.getElementById('invoiceModalOverlay');
+            if (invoiceOverlay) invoiceOverlay.style.display = 'none';
+        }
+
+        function filterProducts() {
+            const searchInput = document.getElementById('searchInput');
+            if (!searchInput) return;
+            const query = searchInput.value.toLowerCase();
+            const cards = document.getElementsByClassName('card');
+
+            for (let i = 0; i < cards.length; i++) {
+                const titleEl = cards[i].getElementsByTagName('h3')[0];
+                if (!titleEl) continue;
+                const title = titleEl.innerText.toLowerCase();
+                const category = cards[i].getAttribute('data-category') || 'all';
+
+                const matchesSearch = title.includes(query);
+                const matchesCat = (typeof currentCategory === 'undefined' || currentCategory === 'all' || category === currentCategory);
+
+                cards[i].style.display = (matchesSearch && matchesCat) ? 'flex' : 'none';
+            }
+        }
+
+        function filterCategory(cat, btn) {
+            currentCategory = cat;
+            const buttons = document.getElementsByClassName('cat-btn');
+            for (let b of buttons) b.classList.remove('active');
+            if (btn) btn.classList.add('active');
+
+            let filtered = products;
+            if (cat !== 'all') {
+                filtered = products.filter(p => p.category === cat);
+            }
+            renderProducts(filtered);
+        }
+
+        function showNotification(text) {
+            const notification = document.getElementById('notification');
+            if (!notification) return;
+            notification.innerText = text;
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 3000);
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            const themeBtn = document.getElementById('themeBtn');
+            if (themeBtn) themeBtn.innerText = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+            try {
+                localStorage.setItem('store_theme', isDark ? 'dark' : 'light');
+            } catch(e) {}
+        }
+
+        function startTimer() {
+            let duration = 5 * 3600;
+            setInterval(() => {
+                let hours = Math.floor(duration / 3600);
+                let minutes = Math.floor((duration % 3600) / 60);
+                let seconds = duration % 60;
+
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                const countdownEl = document.getElementById('countdown');
+                if (countdownEl) countdownEl.innerText = `${hours}:${minutes}:${seconds}`;
+                if (--duration < 0) duration = 5 * 3600;
+            }, 1000);
+        }
+
+        function startSalesTicker() {
+            const sales = [
+                '🔥 Max aus Berlin hat gerade PS5 Controller bei Mohamad gekauft!',
+                '🎉 Sarah aus Hamburg hat NVIDIA RTX 3090 Ti zum Tiefpreis bestellt!',
+                '⚡ Lukas aus München hat Beyerdynamic DT 990 Pro gesichert!',
+                '📦 Ahmed aus Dubai hat Custom Gaming PC bestellt!',
+                '💡 Khaled aus Riad hat Samsung Odyssey G9 Monitor gekauft!'
+            ];
+            let idx = 0;
+            setInterval(() => {
+                const ticker = document.getElementById('salesTicker');
+                if (!ticker) return;
+                ticker.innerText = sales[idx];
+                ticker.classList.add('show');
+                playClickSound();
+                setTimeout(() => ticker.classList.remove('show'), 4000);
+                idx = (idx + 1) % sales.length;
+            }, 12000);
+        }
+
+        function startSocialProofToasts() {
+            const proofs = [
+                { name: 'Max M. (Berlin)', action: 'hat gerade Prozessor (CPU) gekauft! 🔥' },
+                { name: 'Sarah K. (Hamburg)', action: 'hat NVIDIA RTX 3090 Ti bestellt! 🚀' },
+                { name: 'Lukas B. (München)', action: 'sichert sich PlayStation 5 Setup! ⭐' },
+                { name: 'Ahmed A. (Dubai)', action: 'hat Custom Gaming PC konfiguriert! 💻' }
+            ];
+            let i = 0;
+            setInterval(() => {
+                const toast = document.getElementById('socialProofToast');
+                const nameEl = document.getElementById('spName');
+                const actionEl = document.getElementById('spAction');
+                if (!toast || !nameEl || !actionEl) return;
+
+                nameEl.innerText = proofs[i].name;
+                actionEl.innerText = proofs[i].action;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 4500);
+                i = (i + 1) % proofs.length;
+            }, 14000);
+        }
+
+        window.onload = function() {
+            try {
+                const savedTheme = localStorage.getItem('store_theme');
+                const currentHour = new Date().getHours();
+                
+                if (savedTheme === 'dark' || (!savedTheme && (currentHour >= 18 || currentHour < 6))) {
+                    document.body.classList.add('dark-mode');
+                    const themeBtn = document.getElementById('themeBtn');
+                    if (themeBtn) themeBtn.innerText = '☀️ Light Mode';
+                }
+
+                const savedColor = localStorage.getItem('store_primary_color');
+                if (savedColor) {
+                    document.documentElement.style.setProperty('--primary-color', savedColor);
+                }
+            } catch(e) {}
+
+            renderProducts(products);
+            renderFlashSale();
+            updateCart();
+            updateWishlistModal();
+            updateVipStatus();
+            startTimer();
+            startSalesTicker();
+            startSocialProofToasts();
+        };
+    </script>
+</body>
+</html>
